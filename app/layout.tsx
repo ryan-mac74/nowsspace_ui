@@ -14,9 +14,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const title = process.env.NEXT_APP_TITLE;
+const description = process.env.NEXT_APP_DESCRIPTION;
+
+if (!title || !description) {
+  throw new Error("Missing required env metadata");
+}
+
 export const metadata: Metadata = {
-  title: process.env.NEXT_APP_TITLE,
-  description: process.env.NEXT_APP_DESCRIPTION,
+  title,
+  description,
 };
 
 export default function RootLayout({
