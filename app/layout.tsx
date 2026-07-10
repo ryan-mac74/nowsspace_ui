@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_APP_TITLE ?? "NowSSpace",
+  title: process.env.NEXT_PUBLIC_APP_TITLE ?? "NowSSpace",
   description:
-    process.env.NEXT_APP_DESCRIPTION ?? "Real-time synchronization",
+    process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "Real-time synchronization",
 };
 
 export default function RootLayout({
