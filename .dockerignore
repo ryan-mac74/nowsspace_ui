@@ -1,0 +1,16 @@
+# Git
+.git
+
+# Node
+node_modules/
+
+# Python
+venv/
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+.env.*
