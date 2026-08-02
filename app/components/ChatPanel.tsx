@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AppEvent, ChatMessage } from "@/lib/types";
+import { AppEvent, ChatMessage } from "../types/action";
 
 type Props = {
     roomId: string;
@@ -34,13 +34,13 @@ export default function ChatPanel({ roomId, userId, messages, send }: Props) {
     }
 
     return (
-        <div className="fixed bottom-4 right-4 w-80 bg-zinc-900 border border-zinc-800 rounded-xl p-3 shadow-2xl z-40 text-white">
+        <div className="fixed bottom-24 right-4 w-80 bg-zinc-900 border border-zinc-800 rounded-xl p-3 shadow-2xl z-40 text-white pointer-events-auto">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2 px-1">
                 Room Chat
             </h3>
 
             {/* Messages Log Container */}
-            <div className="h-64 overflow-y-auto flex flex-col gap-2 mb-3 pr-1 scrollbar-thin">
+            <div className="h-64 overflow-y-auto flex flex-col gap-2 mb-2 pr-1 scrollbar-thin">
                 {messages.map((m, index) => {
                     const isSelf = m.user_id === userId;
                     return (

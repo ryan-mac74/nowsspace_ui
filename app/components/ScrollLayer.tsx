@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ScrollState } from "@/lib/types";
+import { ScrollState } from "../types/action";
 
 type Props = {
     scrolls: Record<string, ScrollState>;

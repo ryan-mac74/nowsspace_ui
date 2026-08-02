@@ -1,7 +1,7 @@
 "use client";
 
-import { UserPresence } from "@/lib/types";
-import { store } from "@/lib/store";
+import { UserPresence } from "../types/action";
+import { store } from "../lib/store";
 
 type Props = {
     roomId: string;
@@ -13,7 +13,7 @@ type Props = {
 
 export default function PresenceCard({ roomId, users, localUserId, followedUserId, onDisconnect }: Props) {
     return (
-        <div className="fixed top-4 right-4 z-40 w-72 rounded-xl bg-zinc-900 border border-zinc-800 p-4 text-white shadow-2xl flex flex-col gap-4">
+        <div className="fixed top-4 right-4 z-40 w-72 rounded-xl bg-zinc-900 border border-zinc-800 p-4 text-white shadow-2xl flex flex-col gap-4 pointer-events-auto">
             <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3">
                     Online Participants ({Object.keys(users).length})

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { store } from "@/lib/store";
-import { AppState, AppEvent, PendingMessage } from "@/lib/types";
+import { store } from "../lib/store";
+import { AppState, AppEvent, PendingMessage } from "../types/action";
 
 // Hook to handle WebSocket communication 
 export function useSocket(roomId: string, userId: string) {
@@ -210,6 +210,19 @@ export function useSocket(roomId: string, userId: string) {
 
         return () => {
             socket.close();
+
+            // Reset room state so rejoining 
+            // starts with a clean slate
+            setState({
+                text: "",
+                users: {},
+                messages: [],
+                cursors: {},
+                scrolls: {},
+                clicks: {},
+                pages: {},
+                hovers: {},
+            });
 
             // Clear all pending message timeouts & Cancel their delivery attempts
             pendingRef.current.forEach((entry) => clearTimeout(entry.timeout));
