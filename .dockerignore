@@ -7,6 +7,9 @@ node_modules/
 # Python
 venv/
 
+# Next.js
+.next/
+
 # Logs
 logs
 *.log

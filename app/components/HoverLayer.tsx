@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HoverState } from "@/lib/types";
+import { HoverState } from "../types/action";
 
 type Props = {
     hovers: Record<string, HoverState>;

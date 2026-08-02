@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UserPresence } from "@/lib/types";
+import { UserPresence } from "../types/action";
 
 type Props = {
     cursors: Record<string, {

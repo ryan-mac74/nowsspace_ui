@@ -1,19 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSocket } from "@/hooks/useSocket";
-import { store } from "@/lib/store";
-import PresenceCard from "@/components/PresenceCard";
-import ChatPanel from "@/components/ChatPanel";
-import CursorLayer from "@/components/CursorLayer";
-import ScrollLayer from "@/components/ScrollLayer";
-import ClickLayer from "@/components/ClickLayer";
-import PageLayer from "@/components/PageLayer";
-import HoverLayer from "@/components/HoverLayer";
+import { useSocket } from "../hooks/useSocket";
+import { store } from "../lib/store";
+import { UserPublic } from "../types/user";
+import PresenceCard from "../components/PresenceCard";
+import ChatPanel from "../components/ChatPanel";
+import CursorLayer from "../components/CursorLayer";
+import ScrollLayer from "../components/ScrollLayer";
+import ClickLayer from "../components/ClickLayer";
+import PageLayer from "../components/PageLayer";
+import HoverLayer from "../components/HoverLayer";
 
 type Props = {
     roomId: string;
-    userId: string;
+    user: UserPublic;
+    onLeave: () => void;
 };
 
 // To generate a selector from an element
@@ -44,8 +46,8 @@ function getElementSelector(el: Element): string {
     return path.join(" > ");
 }
 
-export default function SessionRoom({ roomId, userId }: Props) {
-    const { state, send } = useSocket(roomId, userId);
+export default function SessionRoom({ roomId, user, onLeave }: Props) {
+    const { state, send } = useSocket(roomId, String(user.id));
     const [followedUserId, setFollowedUserId] = useState<string | null>(null);
 
     // Keep a stable reference to the "send" function for use in event listeners
@@ -71,9 +73,9 @@ export default function SessionRoom({ roomId, userId }: Props) {
             type: "presence.join",
             room: roomId,
             payload: {
-                user_id: userId,
-                name: userId,
-                username: userId,
+                user_id: String(user.id),
+                name: user.name,
+                username: user.username,
                 color: userColor,
                 page: window.location.pathname,
             }
@@ -85,17 +87,17 @@ export default function SessionRoom({ roomId, userId }: Props) {
                 id: crypto.randomUUID(),
                 type: "presence.leave",
                 room: roomId,
-                payload: { user_id: userId }
+                payload: { user_id: String(user.id) }
             });
         };
-    }, [roomId, userId]);
+    }, [roomId, user]);
 
     useEffect(() => {
         const activeOutlines = new Map<string, HTMLElement>();
 
         // Track active target dimensions responsively
         Object.entries(state.hovers).forEach(([remoteUserId, hover]) => {
-            if (!hover?.selector || (remoteUserId === userId)) {
+            if (!hover?.selector || (remoteUserId === String(user.id))) {
                 return;
             }
 
@@ -121,7 +123,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                 }
             });
         };
-    }, [state.hovers, state.users, userId]);
+    }, [state.hovers, state.users, user]);
 
     useEffect(() => {
         let latestX = 0, latestY = 0;
@@ -142,7 +144,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                         id: crypto.randomUUID(),
                         type: "element.hover",
                         room: roomId,
-                        payload: { user_id: userId, selector }
+                        payload: { user_id: String(user.id), selector }
                     });
 
                     lastHover = selector;
@@ -156,7 +158,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                 id: crypto.randomUUID(),
                 type: "click.ping",
                 room: roomId,
-                payload: { user_id: userId, x: e.clientX, y: e.clientY, timestamp: Date.now() }
+                payload: { user_id: String(user.id), x: e.clientX, y: e.clientY, timestamp: Date.now() }
             });
         };
 
@@ -166,7 +168,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                 id: crypto.randomUUID(),
                 type: "scroll.sync",
                 room: roomId,
-                payload: { user_id: userId, x: window.scrollX, y: window.scrollY }
+                payload: { user_id: String(user.id), x: window.scrollX, y: window.scrollY }
             });
         };
 
@@ -187,7 +189,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                 id: crypto.randomUUID(),
                 type: "cursor.move",
                 room: roomId,
-                payload: { user_id: userId, x: latestX, y: latestY }
+                payload: { user_id: String(user.id), x: latestX, y: latestY }
             });
         }, 50);
 
@@ -201,7 +203,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                     id: crypto.randomUUID(),
                     type: "page.change",
                     room: roomId,
-                    payload: { user_id: userId, pathname: lastPage }
+                    payload: { user_id: String(user.id), pathname: lastPage }
                 });
             }
         }, 1000);
@@ -214,25 +216,20 @@ export default function SessionRoom({ roomId, userId }: Props) {
             clearInterval(cursorInterval);
             clearInterval(pageInterval);
         };
-    }, [roomId, userId])
-
-    // Handle leaving the session and redirecting to the homepage
-    const handleLeaveSession = () => {
-        window.location.href = window.location.origin;
-    };
+    }, [roomId, user]);
 
     return (
         <>
             <PresenceCard
                 roomId={roomId}
                 users={state.users}
-                localUserId={userId}
+                localUserId={String(user.id)}
                 followedUserId={followedUserId}
-                onDisconnect={handleLeaveSession}
+                onDisconnect={onLeave}
             />
             <ChatPanel
                 roomId={roomId}
-                userId={userId}
+                userId={String(user.id)}
                 messages={state.messages}
                 send={send}
             />
@@ -241,7 +238,7 @@ export default function SessionRoom({ roomId, userId }: Props) {
                 <CursorLayer cursors={state.cursors} users={state.users} />
                 <ScrollLayer scrolls={state.scrolls} />
                 <ClickLayer clicks={state.clicks} />
-                <PageLayer pages={state.pages} />
+                <PageLayer users={state.users} />
                 <HoverLayer hovers={state.hovers} />
             </div>
         </>
