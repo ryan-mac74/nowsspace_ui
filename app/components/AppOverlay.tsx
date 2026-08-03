@@ -8,11 +8,12 @@ import PopupMenu from "./PopupMenu";
 import LaunchButton from "./LaunchButton";
 
 type Props = {
-    SDK_URL?: string;
+    SDK_URL: string;
+    WS_URL: string;
     user: UserPublic | null;
 };
 
-export default function AppOverlay({ SDK_URL, user }: Props) {
+export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
     const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
@@ -40,7 +41,7 @@ export default function AppOverlay({ SDK_URL, user }: Props) {
                 setIsLoadingRooms(true);
 
                 try {
-                    const response = await fetch(`${SDK_URL}/api/rooms`);
+                    const response = await fetch(`${SDK_URL}/rooms`);
                     if (response.ok) {
                         const data = await response.json();
                         setAvailableRooms(data.rooms || []);
@@ -61,7 +62,7 @@ export default function AppOverlay({ SDK_URL, user }: Props) {
         const currentUserId = user?.id || guestUser.id;
 
         try {
-            const response = await fetch(`${SDK_URL}/api/rooms`, {
+            const response = await fetch(`${SDK_URL}/rooms`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -98,7 +99,7 @@ export default function AppOverlay({ SDK_URL, user }: Props) {
         }
 
         try {
-            const response = await fetch(`${SDK_URL}/api/rooms/${roomId}`, {
+            const response = await fetch(`${SDK_URL}/rooms/${roomId}`, {
                 method: "DELETE",
             });
 
@@ -124,6 +125,7 @@ export default function AppOverlay({ SDK_URL, user }: Props) {
                 {/* Session Room */}
                 {activeRoomId && (
                     <SessionRoom
+                        WS_URL={WS_URL}
                         roomId={activeRoomId}
                         user={user || guestUser}
                         onLeave={() => setActiveRoomId(null)}

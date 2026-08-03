@@ -5,7 +5,7 @@ import { store } from "../lib/store";
 import { AppState, AppEvent, PendingMessage } from "../types/action";
 
 // Hook to handle WebSocket communication 
-export function useSocket(roomId: string, userId: string) {
+export function useSocket(WS_URL: string, roomId: string, userId: string) {
     const [state, setState] = useState<AppState>(store.getState());
     const wsRef = useRef<WebSocket | null>(null);
     const pendingRef = useRef<Map<string, PendingMessage>>(new Map());
@@ -21,7 +21,7 @@ export function useSocket(roomId: string, userId: string) {
 
     // Connect to the WebSocket server and handle incoming messages
     useEffect(() => {
-        const socket = new WebSocket(`ws://localhost:8080/ws/${roomId}?user_id=${userId}`);
+        const socket = new WebSocket(`${WS_URL}/${roomId}?user_id=${userId}`);
         wsRef.current = socket;
 
         socket.onopen = () => {
