@@ -29,21 +29,24 @@ export default function PresenceCard({ roomId, users, localUserId, followedUserI
                                     style={{ backgroundColor: user.color }}
                                 />
                                 <span className="text-sm font-medium text-zinc-200 truncate">
-                                    @{user.username || user.id || "Anonymous"} {user.id === localUserId && "(You)"}
+                                    @{user.username} {(user.id === localUserId) && "(You)"}
                                 </span>
                             </div>
 
                             {/* Viewport Follow Button */}
-                            {user.id && user.id !== localUserId && (
+                            {user.id && (user.id !== localUserId) && (
                                 <button
                                     onClick={() => {
                                         const current = store.getFollowedUserId();
-                                        store.setFollowedUserId(current === user.id ? null : user.id);
+                                        store.setFollowedUserId((current === user.id) ? null : user.id);
                                     }}
-                                    className={`text-[11px] px-2 py-1 rounded transition shrink-0 ${followedUserId === user.id
-                                        ? "bg-blue-600 font-semibold text-white"
-                                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-                                        }`}
+                                    className={`
+                                        text-[11px] px-2 py-1 rounded transition shrink-0 
+                                        ${followedUserId === user.id
+                                            ? "bg-blue-600 font-semibold text-white"
+                                            : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                                        }
+                                    `}
                                 >
                                     {followedUserId === user.id ? "Following" : "Follow"}
                                 </button>

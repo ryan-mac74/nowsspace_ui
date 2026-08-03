@@ -66,7 +66,7 @@ export default function CursorLayer({ cursors, users }: Props) {
                                 backgroundColor: user.color || "#3B82F6"
                             }}
                         >
-                            @{user.username || user.id}
+                            @{user.username}
                         </div>
                     </div>
                 );

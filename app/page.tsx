@@ -1,5 +1,5 @@
 import AppOverlay from "./components/AppOverlay";
-import { UserPublic } from "./types/user";
+import { UserPublic } from "./types/users";
 
 const SDK_URL =
   process.env.NEXT_PUBLIC_SDK_URL ||
