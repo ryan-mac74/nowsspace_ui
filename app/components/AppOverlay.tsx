@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserPublic } from "../types/user";
-import { Room } from "../types/room";
+import { UserPublic } from "../types/users";
+import { Room } from "../types/rooms";
 import SessionRoom from "./SessionRoom";
 import PopupMenu from "./PopupMenu";
 import LaunchButton from "./LaunchButton";
@@ -67,8 +67,8 @@ export default function AppOverlay({ SDK_URL, user }: Props) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    title: `Room ${Math.floor(Math.random() * 1000)}`,
-                    user_id: String(currentUserId),
+                    name: `Room ${Math.floor(Math.random() * 1000)}`,
+                    owner_id: String(currentUserId),
                 })
             });
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSocket } from "../hooks/useSocket";
 import { store } from "../lib/store";
-import { UserPublic } from "../types/user";
+import { UserPublic } from "../types/users";
 import PresenceCard from "../components/PresenceCard";
 import ChatPanel from "../components/ChatPanel";
 import CursorLayer from "../components/CursorLayer";
@@ -87,7 +87,9 @@ export default function SessionRoom({ roomId, user, onLeave }: Props) {
                 id: crypto.randomUUID(),
                 type: "presence.leave",
                 room: roomId,
-                payload: { user_id: String(user.id) }
+                payload: {
+                    user_id: String(user.id),
+                }
             });
         };
     }, [roomId, user]);
@@ -144,7 +146,10 @@ export default function SessionRoom({ roomId, user, onLeave }: Props) {
                         id: crypto.randomUUID(),
                         type: "element.hover",
                         room: roomId,
-                        payload: { user_id: String(user.id), selector }
+                        payload: {
+                            user_id: String(user.id),
+                            selector,
+                        }
                     });
 
                     lastHover = selector;
@@ -158,7 +163,12 @@ export default function SessionRoom({ roomId, user, onLeave }: Props) {
                 id: crypto.randomUUID(),
                 type: "click.ping",
                 room: roomId,
-                payload: { user_id: String(user.id), x: e.clientX, y: e.clientY, timestamp: Date.now() }
+                payload: {
+                    user_id: String(user.id),
+                    x: e.clientX,
+                    y: e.clientY,
+                    timestamp: Date.now(),
+                }
             });
         };
 
@@ -168,7 +178,11 @@ export default function SessionRoom({ roomId, user, onLeave }: Props) {
                 id: crypto.randomUUID(),
                 type: "scroll.sync",
                 room: roomId,
-                payload: { user_id: String(user.id), x: window.scrollX, y: window.scrollY }
+                payload: {
+                    user_id: String(user.id),
+                    x: window.scrollX,
+                    y: window.scrollY,
+                }
             });
         };
 
@@ -189,7 +203,11 @@ export default function SessionRoom({ roomId, user, onLeave }: Props) {
                 id: crypto.randomUUID(),
                 type: "cursor.move",
                 room: roomId,
-                payload: { user_id: String(user.id), x: latestX, y: latestY }
+                payload: {
+                    user_id: String(user.id),
+                    x: latestX,
+                    y: latestY,
+                }
             });
         }, 50);
 
@@ -203,7 +221,10 @@ export default function SessionRoom({ roomId, user, onLeave }: Props) {
                     id: crypto.randomUUID(),
                     type: "page.change",
                     room: roomId,
-                    payload: { user_id: String(user.id), pathname: lastPage }
+                    payload: {
+                        user_id: String(user.id),
+                        pathname: lastPage,
+                    }
                 });
             }
         }, 1000);

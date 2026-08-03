@@ -1,6 +1,6 @@
 "use client";
 
-import { Room } from "../types/room";
+import { Room } from "../types/rooms";
 
 type Props = {
     availableRooms: Room[];
