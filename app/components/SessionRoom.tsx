@@ -13,6 +13,7 @@ import PageLayer from "../components/PageLayer";
 import HoverLayer from "../components/HoverLayer";
 
 type Props = {
+    WS_URL: string;
     roomId: string;
     user: UserPublic;
     onLeave: () => void;
@@ -46,8 +47,8 @@ function getElementSelector(el: Element): string {
     return path.join(" > ");
 }
 
-export default function SessionRoom({ roomId, user, onLeave }: Props) {
-    const { state, send } = useSocket(roomId, String(user.id));
+export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
+    const { state, send } = useSocket(WS_URL, roomId, String(user.id));
     const [followedUserId, setFollowedUserId] = useState<string | null>(null);
 
     // Keep a stable reference to the "send" function for use in event listeners
