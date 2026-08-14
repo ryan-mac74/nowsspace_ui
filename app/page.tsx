@@ -1,4 +1,6 @@
-import { UserPublic } from "./types/users";
+"use client";
+
+import useAuth from "./hooks/useAuth";
 import AppOverlay from "./components/AppOverlay";
 import ChatContainer from "./components/ChatContainer";
 
@@ -10,11 +12,9 @@ const WS_URL =
   process.env.NEXT_PUBLIC_WS_URL ||
   "ws://localhost:8080/ws";
 
-type Props = {
-  user: UserPublic | null;
-};
+export default function Home() {
+  const { user } = useAuth();
 
-export default function Home({ user }: Props) {
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-4 md:p-8 flex flex-col items-center justify-center relative">
       {/* Chat Container */}
