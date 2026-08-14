@@ -4,11 +4,11 @@ import ChatContainer from "./components/ChatContainer";
 
 const SDK_URL =
   process.env.NEXT_PUBLIC_SDK_URL ||
-  "http://localhost:8000";
+  "http://localhost:8080";
 
 const WS_URL =
   process.env.NEXT_PUBLIC_WS_URL ||
-  "ws://localhost:8000/ws";
+  "ws://localhost:8080/ws";
 
 type Props = {
   user: UserPublic | null;
