@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { AppEvent, ChatMessage } from "../types/action";
+import { AppEvent, UserPresence, ChatMessage } from "../../types/action";
 
 type Props = {
     roomId: string;
     userId: string;
+    users: Record<string, UserPresence>;
     messages: ChatMessage[];
     send: (event: AppEvent) => void;
 };
 
-export default function ChatPanel({ roomId, userId, messages, send }: Props) {
+export default function ChatPanel({
+    roomId, userId, users, messages, send
+}: Props) {
     const [text, setText] = useState("");
 
     function sendMessage() {
@@ -42,19 +45,20 @@ export default function ChatPanel({ roomId, userId, messages, send }: Props) {
             {/* Messages Log Container */}
             <div className="h-64 overflow-y-auto flex flex-col gap-2 mb-2 pr-1 scrollbar-thin">
                 {messages.map((m, index) => {
-                    const isSelf = m.user_id === userId;
+                    const user = users[m.user_id];
+
                     return (
                         <div
                             key={`${m.id || crypto.randomUUID()}-${index}`}
                             className={`p-2 rounded text-sm max-w-[85%] border 
-                                ${isSelf
+                                ${m.user_id === userId
                                     ? "bg-blue-600/20 border-blue-500/30 self-end text-right"
                                     : "bg-zinc-800 border-zinc-700/50 self-start"
                                 }`
                             }
                         >
-                            <div className="text-[10px] text-zinc-400 font-mono mb-0.5">
-                                @{m.user_id} {isSelf && "(You)"}
+                            <div className="text-xs text-zinc-400 font-mono mb-0.5">
+                                @{user.username || `guest.${m.user_id}`} {m.user_id === userId && "(You)"}
                             </div>
                             <div className="text-zinc-100 break-words text-left">
                                 {m.message}

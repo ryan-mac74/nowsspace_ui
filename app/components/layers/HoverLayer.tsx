@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HoverState } from "../types/action";
+import { HoverState } from "../../types/action";
 
 type Props = {
     hovers: Record<string, HoverState>;
@@ -48,6 +48,8 @@ export default function HoverLayer({ hovers }: Props) {
         <>
             {Object.entries(hovers).map(([userId, hover]) => {
                 const rect = bounds[userId];
+
+                // Render only if the user has a known hover target
                 if (!hover?.selector || !rect) {
                     return null;
                 }

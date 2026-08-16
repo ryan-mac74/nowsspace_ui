@@ -1,5 +1,3 @@
-// source: https://github.com/fastapi/full-stack-fastapi-template/blob/master/frontend/src/hooks/useAuth.ts
-
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -9,11 +7,12 @@ import { setToken, clearToken } from "../utils/token";
 import useCustomToast from "../hooks/useCustomToast";
 import type { UserPublic } from "../types/users";
 
-// Moving static .env variables outside of the hook body (module scope)
-// keeps the dependencies stable
+// Put static .env variables outside of the hook body (module scope)
+// to keep the dependencies stable
 const SDK_URL =
   process.env.NEXT_PUBLIC_SDK_URL ||
   "http://localhost:3000/api";
+const TOKEN_KEY = process.env.TOKEN_KEY || "token";
 
 export default function useAuth() {
   const router = useRouter();
@@ -44,18 +43,25 @@ export default function useAuth() {
     // 1. React finishes mounting and completing the effect's setup phase
     // 2. The call stack clears up and control returns to the browser
     // 3. queueMicrotask runs fetchMe() immediately afterward in a new microtask frame
-    // 4. React sees the state update as asynchronous, 
-    // silencing the warning with no delays or performance impact
+    // 4. React sees the state update as asynchronous, silencing the warning with no delays or performance impact
     queueMicrotask(() => {
       void fetchMe();
     });
 
-    // Sync logout across all components using this hook
     const handleLogout = () => setUser(null);
-    window.addEventListener("auth-logout", handleLogout);
+    const handleLogin = () => {
+      void fetchMe();
+    };
 
-    // Clean up event listener on unmount
-    return () => window.removeEventListener("auth-logout", handleLogout);
+    // Sync login/logout across all components using this hook
+    window.addEventListener("auth-logout", handleLogout);
+    window.addEventListener("auth-login", handleLogin);
+
+    return () => {
+      // Clean up event listeners on unmount
+      window.removeEventListener("auth-logout", handleLogout);
+      window.removeEventListener("auth-login", handleLogin);
+    };
   }, [fetchMe]);
 
   const logout = async (toast: boolean = true) => {
@@ -68,7 +74,7 @@ export default function useAuth() {
         throw new Error("❌ Failed to log out");
       }
 
-      clearToken();
+      clearToken(TOKEN_KEY);
       setUser(null);
 
       // Notify all instances of this hook to update their state
@@ -231,7 +237,10 @@ export default function useAuth() {
 
       if (data.token) {
         // Save newly issued JWT token
-        setToken(data.token);
+        setToken(TOKEN_KEY, data.token);
+
+        // Notify all instances of this hook to update their state
+        window.dispatchEvent(new Event("auth-login"));
       }
 
       // Redirect user to homepage with success message

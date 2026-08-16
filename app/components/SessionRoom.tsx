@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useSocket } from "../hooks/useSocket";
 import { store } from "../lib/store";
 import { UserPublic } from "../types/users";
-import PresenceCard from "../components/PresenceCard";
-import ChatPanel from "../components/ChatPanel";
-import CursorLayer from "../components/CursorLayer";
-import ScrollLayer from "../components/ScrollLayer";
-import ClickLayer from "../components/ClickLayer";
-import PageLayer from "../components/PageLayer";
-import HoverLayer from "../components/HoverLayer";
+import PresenceCard from "../components/containers/PresenceCard";
+import ChatPanel from "../components/containers/ChatPanel";
+import CursorLayer from "../components/layers/CursorLayer";
+import ScrollLayer from "../components/layers/ScrollLayer";
+import ClickLayer from "../components/layers/ClickLayer";
+import PageLayer from "../components/layers/PageLayer";
+import HoverLayer from "../components/layers/HoverLayer";
 
 type Props = {
     WS_URL: string;
@@ -252,13 +252,14 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
             <ChatPanel
                 roomId={roomId}
                 userId={String(user.id)}
+                users={state.users}
                 messages={state.messages}
                 send={send}
             />
 
             <div className="fixed inset-0 pointer-events-none z-[99990]">
-                <CursorLayer cursors={state.cursors} users={state.users} />
-                <ScrollLayer scrolls={state.scrolls} />
+                <CursorLayer users={state.users} cursors={state.cursors} />
+                <ScrollLayer users={state.users} scrolls={state.scrolls} />
                 <ClickLayer clicks={state.clicks} />
                 <PageLayer users={state.users} />
                 <HoverLayer hovers={state.hovers} />
