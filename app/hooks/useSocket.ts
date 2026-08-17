@@ -254,7 +254,7 @@ export function useSocket(WS_URL: string, roomId: string, userId: string) {
 
             // Cancel message delivery if it hasn't been delivered after a few attempts
             if (attempt > 3) {
-                console.error(`Message delivery failed permanently: ${event.type}`);
+                console.error(`❌ Message delivery failed permanently: ${event.type}`);
                 pendingRef.current.delete(event.id);
                 return;
             }

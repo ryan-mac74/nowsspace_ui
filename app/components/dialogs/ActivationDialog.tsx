@@ -26,7 +26,7 @@ export default function ActivationDialog({
       await onConfirm?.();
       setOpen(false);
     } catch (error) {
-      console.error(error);
+      console.error("❌ Failed to confirm action:", error);
     } finally {
       setLoading(false);
     }

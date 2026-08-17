@@ -32,7 +32,7 @@ export default function useAuth() {
       const data = await res.json();
       setUser(data.user ?? null);
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to fetch user:", error);
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -87,7 +87,7 @@ export default function useAuth() {
         showSuccessToast("You have been logged out");
       }
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to log out:", error);
       showErrorToast("Something went wrong");
     }
   };
@@ -108,7 +108,7 @@ export default function useAuth() {
 
       showSuccessToast("All scheduled account deletions have been processed");
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to process all scheduled account deletions:", error);
       showErrorToast("Something went wrong");
     }
   };
@@ -142,7 +142,7 @@ export default function useAuth() {
 
       showSuccessToast("Your account has been scheduled for deletion");
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to schedule account deletion:", error);
       showErrorToast("Something went wrong");
     }
   };
@@ -175,7 +175,7 @@ export default function useAuth() {
 
       showSuccessToast("Your account has been deactivated");
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to deactivate account:", error);
       showErrorToast("Something went wrong");
     }
   };
@@ -209,7 +209,7 @@ export default function useAuth() {
 
       showSuccessToast("Your account has been reactivated");
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to reactivate account:", error);
       showErrorToast("Something went wrong");
     }
   };
@@ -246,7 +246,7 @@ export default function useAuth() {
       // Redirect user to homepage with success message
       router.push("/?auth=signup-success");
     } catch (error: unknown) {
-      console.error(error);
+      console.error("❌ Failed to create account:", error);
       showErrorToast("Something went wrong");
     }
   };

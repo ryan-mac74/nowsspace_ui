@@ -22,7 +22,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
       await onLogout?.();
       setOpen(false);
     } catch (error) {
-      console.error(error);
+      console.error("❌ Failed to log out:", error);
     } finally {
       setLoading(false);
     }

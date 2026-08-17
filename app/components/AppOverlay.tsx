@@ -47,7 +47,7 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
                         setAvailableRooms(data.rooms || []);
                     }
                 } catch (error) {
-                    console.error("Failed to fetch rooms:", error);
+                    console.error("❌ Failed to fetch rooms:", error);
                 } finally {
                     setIsLoadingRooms(false);
                 }
@@ -80,7 +80,7 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
                 setIsMenuOpen(false);
             }
         } catch (error) {
-            console.error("Failed to create room:", error);
+            console.error("❌ Failed to create room:", error);
         }
     };
 
@@ -112,10 +112,10 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
                     setActiveRoomId(null);
                 }
             } else {
-                console.error("Failed to delete room:", await response.text());
+                console.error("❌ Failed to delete room:", await response.text());
             }
         } catch (error) {
-            console.error("Error connecting to server to delete room:", error);
+            console.error("❌ Error connecting to server to delete room:", error);
         }
     };
 

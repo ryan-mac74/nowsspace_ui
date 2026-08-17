@@ -47,10 +47,10 @@ export function useChat(sdkUrl: string) {
                 };
                 setMessages((prev) => [...prev, aiMsg]);
             } else {
-                console.error("Failed to generate response");
+                console.error("❌ Failed to generate response");
             }
         } catch (error) {
-            console.error("API Error:", error);
+            console.error("❌ API Error:", error);
         } finally {
             setIsLoading(false);
         }
