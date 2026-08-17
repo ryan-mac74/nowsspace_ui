@@ -35,6 +35,7 @@ export function useSocket(WS_URL: string, roomId: string, userId: string) {
             if (raw.type === "ack") {
                 const id = raw.eventId;
                 const entry = pendingRef.current.get(id);
+
                 if (entry) {
                     entry.cancelled = true;
                     clearTimeout(entry.timeout);
@@ -53,7 +54,7 @@ export function useSocket(WS_URL: string, roomId: string, userId: string) {
                         type: "state.patch",
                         op: "set",
                         path: key,
-                        value: value
+                        value,
                     });
                 });
 
@@ -82,6 +83,7 @@ export function useSocket(WS_URL: string, roomId: string, userId: string) {
             if ((raw.type === "presence.join") && raw.payload?.user_id) {
                 const user = raw.payload;
                 const exists = user.user_id in currentRoomState.users;
+
                 if (!exists) {
                     // Apply a patch to add the new user to the store
                     store.applyPatch({
@@ -90,8 +92,8 @@ export function useSocket(WS_URL: string, roomId: string, userId: string) {
                         path: `users.${user.user_id}`,
                         value: {
                             id: user.user_id,
-                            username: user.username || user.user_id,
-                            name: user.name || user.user_id,
+                            username: user.username,
+                            name: user.name,
                             color: user.color || "#3B82F6",
                             page: user.page || "/",
                         }

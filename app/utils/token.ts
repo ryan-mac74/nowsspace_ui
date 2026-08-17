@@ -1,13 +1,11 @@
-const TOKEN_KEY = process.env.TOKEN_KEY ?? "token";
-
-export function setToken(token: string) {
+export function setToken(TOKEN_KEY: string, token: string) {
     localStorage.setItem(TOKEN_KEY, token);
 }
 
-export function getToken(): string | null {
+export function getToken(TOKEN_KEY: string): string | null {
     return localStorage.getItem(TOKEN_KEY);
 }
 
-export function clearToken() {
+export function clearToken(TOKEN_KEY: string) {
     localStorage.removeItem(TOKEN_KEY);
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ClickState } from "../types/action";
+import { ClickState } from "../../types/action";
 
 // Dedicated component for a single click
 function ClickIndicator({ click }: { click: ClickState }) {

@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ScrollState } from "../types/action";
+import { UserPresence, ScrollState } from "../../types/action";
 
 type Props = {
+    users: Record<string, UserPresence>;
     scrolls: Record<string, ScrollState>;
 };
 
-export default function ScrollLayer({ scrolls }: Props) {
+export default function ScrollLayer({ users, scrolls }: Props) {
     const [indicatorY, setIndicatorY] = useState<Record<string, number>>({});
 
     useEffect(() => {
@@ -38,21 +39,25 @@ export default function ScrollLayer({ scrolls }: Props) {
 
     return (
         <>
-            {Object.entries(indicatorY).map(([userId, yPos]) => (
-                <div
-                    key={userId}
-                    className="fixed right-0 z-40 transition-all duration-200 pointer-events-none flex items-center"
-                    style={{
-                        top: `${yPos}px`
-                    }}
-                >
-                    {/* Tiny Arrow Indicator pointing to position */}
-                    <div className="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[8px] border-r-blue-500" />
-                    <div className="bg-blue-500 text-white font-mono text-[9px] px-1.5 py-0.5 rounded-l shadow-lg">
-                        @{userId.slice(0, 8)}
+            {Object.entries(indicatorY).map(([userId, yPos]) => {
+                const user = users[userId];
+
+                return (
+                    <div
+                        key={userId}
+                        className="fixed right-0 z-40 transition-all duration-200 pointer-events-none flex items-center"
+                        style={{
+                            top: `${yPos}px`
+                        }}
+                    >
+                        {/* Tiny Arrow Indicator pointing to position */}
+                        <div className="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[8px] border-r-blue-500" />
+                        <div className="bg-blue-500 text-white font-mono text-xs px-1.5 py-0.5 rounded-l shadow-lg">
+                            @{user.username || `guest.${user.id}`}
+                        </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
         </>
     );
 }

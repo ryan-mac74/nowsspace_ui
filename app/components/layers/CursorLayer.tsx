@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UserPresence } from "../types/action";
+import { UserPresence } from "../../types/action";
 
 type Props = {
+    users: Record<string, UserPresence>;
     cursors: Record<string, {
         x: number;
         y: number;
     }>;
-    users: Record<string, UserPresence>;
+
 };
 
-export default function CursorLayer({ cursors, users }: Props) {
+export default function CursorLayer({ users, cursors }: Props) {
     const [smooth, setSmooth] = useState(cursors);
 
     useEffect(() => {
@@ -39,9 +40,6 @@ export default function CursorLayer({ cursors, users }: Props) {
         <>
             {Object.entries(smooth).map(([userId, cursor]) => {
                 const user = users[userId];
-                if (!user) {
-                    return null;
-                }
 
                 return (
                     <div
@@ -61,12 +59,12 @@ export default function CursorLayer({ cursors, users }: Props) {
 
                         {/* Name Badge Label */}
                         <div
-                            className="px-2 py-0.5 rounded text-[10px] text-white ml-3 shadow-md font-medium whitespace-nowrap"
+                            className="px-2 py-0.5 rounded text-sm text-white ml-3 shadow-md font-medium whitespace-nowrap"
                             style={{
                                 backgroundColor: user.color || "#3B82F6"
                             }}
                         >
-                            @{user.username}
+                            @{user.username || `guest.${user.id}`}
                         </div>
                     </div>
                 );

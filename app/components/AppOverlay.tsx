@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { UserPublic } from "../types/users";
 import { Room } from "../types/rooms";
 import SessionRoom from "./SessionRoom";
-import PopupMenu from "./PopupMenu";
-import LaunchButton from "./LaunchButton";
+import PopupMenu from "./containers/PopupMenu";
+import LaunchButton from "./ui/LaunchButton";
 
 type Props = {
     SDK_URL: string;
