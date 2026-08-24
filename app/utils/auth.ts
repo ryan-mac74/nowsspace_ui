@@ -1,5 +1,9 @@
 import { getToken } from "@/utils/token";
 
+const SDK_URL =
+    process.env.NEXT_PUBLIC_SDK_URL ||
+    "http://localhost:8080/api";
+
 const ENV = process.env.ENV || "development";
 const TOKEN_KEY = process.env.TOKEN_KEY || "token";
 
@@ -27,3 +31,13 @@ export function authFetch(
 
     return fetch(url, config);
 }
+
+export function getAuthUrl(provider: string): string {
+    const url = new URL(`${SDK_URL}/auth/${provider}`);
+    const token = getToken(TOKEN_KEY);
+
+    if (token) {
+        url.searchParams.set("token", token);
+    }
+    return url.toString();
+};

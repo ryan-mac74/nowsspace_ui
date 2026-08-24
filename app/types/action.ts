@@ -18,7 +18,7 @@ export type Patch =
         path: string;
         value: unknown;
         seq?: number;
-    }
+    };
 
 export type PendingMessage = {
     id: string;
@@ -66,7 +66,7 @@ export type HoverState = {
 };
 
 export type AppState = {
-    text: string;
+    controller_id: string | null;
     users: Record<string, UserPresence>;
     messages: ChatMessage[];
     cursors: Record<string, CursorState>;
@@ -96,6 +96,16 @@ export type AppEvent =
         type: "presence.leave";
         room: string;
         payload: { user_id: string };
+    }
+    | {
+        id: string;
+        seq?: number;
+        type: "room.control";
+        room: string;
+        payload: {
+            user_id: string;
+            target_id: string;
+        };
     }
     | {
         id: string;
@@ -161,4 +171,4 @@ export type AppEvent =
             user_id: string;
             selector: string;
         };
-    }
+    };

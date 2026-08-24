@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AppEvent, UserPresence, ChatMessage } from "../../types/action";
+import Button from "../ui/Button";
 
 type Props = {
     roomId: string;
@@ -43,7 +44,7 @@ export default function ChatPanel({
             </h3>
 
             {/* Messages Log Container */}
-            <div className="h-64 overflow-y-auto flex flex-col gap-2 mb-2 pr-1 scrollbar-thin">
+            <div className="h-40 overflow-y-auto flex flex-col gap-2 mb-2 pr-1 scrollbar-thin">
                 {messages.map((m, index) => {
                     const user = users[m.user_id];
 
@@ -81,12 +82,12 @@ export default function ChatPanel({
                     onKeyDown={(e) => (e.key === "Enter") && sendMessage()}
                 />
 
-                <button
+                <Button
                     onClick={sendMessage}
                     className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 rounded-lg transition"
                 >
                     Send
-                </button>
+                </Button>
             </div>
         </div>
     );

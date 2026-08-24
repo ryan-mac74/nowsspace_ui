@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { UserPublic } from "../types/users";
 import { Room } from "../types/rooms";
+import { authFetch } from "../utils/auth";
 import SessionRoom from "./SessionRoom";
 import PopupMenu from "./containers/PopupMenu";
 import LaunchButton from "./ui/LaunchButton";
@@ -15,13 +16,13 @@ type Props = {
 
 export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
+    const [activeRoom, setActiveRoom] = useState<Room | null>(null);
     const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
     const [isLoadingRooms, setIsLoadingRooms] = useState(false);
 
     // Guest User for unauthenticated users
     const [guestUser] = useState<UserPublic>(() => {
-        const guestUserId = Math.floor(Math.random() * 10000);
+        const guestUserId = Math.floor(Math.random() * 1000000);
 
         return {
             id: -guestUserId,
@@ -41,13 +42,13 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
                 setIsLoadingRooms(true);
 
                 try {
-                    const response = await fetch(`${SDK_URL}/rooms`);
+                    const response = await authFetch(`${SDK_URL}/rooms`);
                     if (response.ok) {
                         const data = await response.json();
                         setAvailableRooms(data.rooms || []);
                     }
                 } catch (error) {
-                    console.error("Failed to fetch rooms:", error);
+                    console.error("❌ Failed to fetch rooms:", error);
                 } finally {
                     setIsLoadingRooms(false);
                 }
@@ -55,38 +56,52 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
 
             fetchRooms();
         }
-    }, [isMenuOpen]);
+    }, [isMenuOpen, SDK_URL]);
 
     // Create a new room
     const handleCreateRoom = async () => {
         const currentUserId = user?.id || guestUser.id;
+        const roomName = "Room";
 
         try {
-            const response = await fetch(`${SDK_URL}/rooms`, {
+            const response = await authFetch(`${SDK_URL}/rooms`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    name: `Room ${Math.floor(Math.random() * 1000)}`,
+                    name: roomName,
                     owner_id: String(currentUserId),
                 })
             });
 
             if (response.ok) {
-                const newRoom = await response.json();
+                const newRoom: Room = await response.json();
 
-                setActiveRoomId(newRoom.id);
+                setActiveRoom(newRoom);
                 setIsMenuOpen(false);
             }
         } catch (error) {
-            console.error("Failed to create room:", error);
+            console.error("❌ Failed to create room:", error);
         }
     };
 
     // Join an existing room
     const handleJoinRoom = (roomId: string) => {
-        setActiveRoomId(roomId);
+        const targetRoom = availableRooms.find(r => r.id === roomId);
+
+        if (targetRoom) {
+            setActiveRoom(targetRoom);
+        } else {
+            // Fallback if room metadata isn't cached yet
+            setActiveRoom({
+                id: roomId,
+                name: `Room ${roomId}`,
+                owner_id: "",
+                created_at: new Date().toISOString(),
+            });
+        }
+
         setIsMenuOpen(false);
     };
 
@@ -99,7 +114,7 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
         }
 
         try {
-            const response = await fetch(`${SDK_URL}/rooms/${roomId}`, {
+            const response = await authFetch(`${SDK_URL}/rooms/${roomId}`, {
                 method: "DELETE",
             });
 
@@ -108,14 +123,14 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
                 setAvailableRooms((prev) => prev.filter(r => r.id !== roomId));
 
                 // If the deleted room is currently active, close it
-                if (activeRoomId === roomId) {
-                    setActiveRoomId(null);
+                if (activeRoom?.id === roomId) {
+                    setActiveRoom(null);
                 }
             } else {
-                console.error("Failed to delete room:", await response.text());
+                console.error("❌ Failed to delete room:", await response.text());
             }
         } catch (error) {
-            console.error("Error connecting to server to delete room:", error);
+            console.error("❌ Error connecting to server to delete room:", error);
         }
     };
 
@@ -123,12 +138,13 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
         <>
             <div className="fixed inset-0 z-50 pointer-events-none">
                 {/* Session Room */}
-                {activeRoomId && (
+                {activeRoom && (
                     <SessionRoom
                         WS_URL={WS_URL}
-                        roomId={activeRoomId}
+                        roomId={activeRoom.id}
+                        roomOwnerId={activeRoom.owner_id}
                         user={user || guestUser}
-                        onLeave={() => setActiveRoomId(null)}
+                        onLeave={() => setActiveRoom(null)}
                     />
                 )}
             </div>

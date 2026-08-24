@@ -34,7 +34,16 @@ export default function AppHeader() {
 
         // Close menu on outside click
         function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            const target = event.target as Element;
+
+            // Don't close if clicking inside the menu 
+            // OR inside an open Radix Dialog/Portal
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(target) &&
+                !target.closest("[role='dialog']") &&
+                !target.closest("[data-radix-portal]")
+            ) {
                 setMenuOpen(false);
             }
         }
@@ -69,7 +78,7 @@ export default function AppHeader() {
                 ) : (
                     // Attach ref here to detect clicks outside this container
                     <div ref={menuRef} className="relative">
-                        <button
+                        <Button
                             onClick={() => setMenuOpen((prev) => !prev)}
                             className="
                                 flex items-center focus:outline-none rounded-full 
@@ -81,7 +90,7 @@ export default function AppHeader() {
                                 name={user?.name}
                                 avatar={user?.avatar}
                             />
-                        </button>
+                        </Button>
 
                         {menuOpen && (
                             <div
@@ -93,11 +102,10 @@ export default function AppHeader() {
                                 <div className="px-3 py-2 border-b border-zinc-800/80 text-sm">
                                     <p className="font-semibold text-white">
                                         {user?.name || `Guest ${user?.id}`}
-                                        {user?.username && (
-                                            <span className="ml-2 text-zinc-200">
-                                                @{user.username || `guest.${user.id}`}
-                                            </span>
-                                        )}
+
+                                        <span className="ml-2 text-zinc-200">
+                                            @{user?.username || `guest.${user?.id}`}
+                                        </span>
                                     </p>
 
                                     {user?.email && (

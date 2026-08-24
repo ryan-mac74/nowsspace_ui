@@ -5,6 +5,7 @@ import { useChat } from "../../hooks/useChat";
 import AppHeader from "../AppHeader";
 import AIMessage from "../AIMessage";
 import Logo from "../ui/Logo";
+import Button from "../ui/Button";
 
 type Props = {
     SDK_URL: string;
@@ -39,7 +40,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                 <AppHeader />
 
                 {messages.length === 0 ? (
-                    <div className="h-full min-h-[350px] flex flex-col items-center justify-center text-white space-y-3">
+                    <div className="h-full min-h-80 flex flex-col items-center justify-center text-white space-y-3">
                         <p className="text-lg font-medium text-zinc-400">
                             Hello! What do you have in mind?
                         </p>
@@ -120,7 +121,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                         "
                     />
 
-                    <button
+                    <Button
                         type="submit"
                         disabled={isLoading || !input.trim()}
                         className="
@@ -131,7 +132,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

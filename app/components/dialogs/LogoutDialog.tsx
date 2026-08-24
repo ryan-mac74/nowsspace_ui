@@ -22,7 +22,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
       await onLogout?.();
       setOpen(false);
     } catch (error) {
-      console.error(error);
+      console.error("❌ Failed to log out:", error);
     } finally {
       setLoading(false);
     }
@@ -31,10 +31,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <Button
-          className={className}
-          onClick={() => setOpen(true)}
-        >
+        <Button className={className}>
           <MenuIcon Icon={LogOut} />
           Log Out
         </Button>
@@ -56,7 +53,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
 
           <div className="text-center">
             <Dialog.Title className="text-xl font-bold text-white">
-              Log out to your account
+              Log out of your account
             </Dialog.Title>
             <Dialog.Description className="text-sm text-zinc-400 mt-2 leading-relaxed">
               Are you sure you want to log out?

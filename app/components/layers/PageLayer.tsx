@@ -22,7 +22,7 @@ export default function PageLayer({ users }: Props) {
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span className="font-medium text-zinc-400">
-                            @{user.username || `guest.${user.id}`}:
+                            @{user?.username || `guest.${user?.id}`}:
                         </span>
                         <span className="font-mono bg-zinc-950 px-1 py-0.5 rounded text-emerald-400 border border-emerald-950">
                             {user.page}
