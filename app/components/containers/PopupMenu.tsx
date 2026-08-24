@@ -1,6 +1,7 @@
 "use client";
 
 import { Room } from "../../types/rooms";
+import Button from "../ui/Button";
 
 type Props = {
     availableRooms: Room[];
@@ -16,7 +17,7 @@ export default function PopupMenu({
     return (
         <div className="mb-4 w-72 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transform transition-all">
             <div className="p-3">
-                <button
+                <Button
                     onClick={handleCreateRoom}
                     className="
                         w-full text-left px-4 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 
@@ -27,7 +28,7 @@ export default function PopupMenu({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                     Create New Room
-                </button>
+                </Button>
 
                 <div className="px-2 pb-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Active Rooms
@@ -42,7 +43,7 @@ export default function PopupMenu({
                         availableRooms.map(room => (
                             <li key={room.id} className="flex items-center gap-1">
                                 {/* Join Button */}
-                                <button
+                                <Button
                                     onClick={() => handleJoinRoom(room.id)}
                                     className="
                                         flex-1 flex justify-between items-center px-3 py-2 hover:bg-gray-100 
@@ -51,10 +52,10 @@ export default function PopupMenu({
                                 >
                                     <span className="truncate">{room.name}</span>
                                     <span className="text-xs text-gray-400 ml-2">#{room.id}</span>
-                                </button>
+                                </Button>
 
                                 {/* Delete Button */}
-                                <button
+                                <Button
                                     onClick={(e) => handleDeleteRoom(room.id, e)}
                                     className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                     title="Delete Room"
@@ -62,7 +63,7 @@ export default function PopupMenu({
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                     </svg>
-                                </button>
+                                </Button>
                             </li>
                         ))
                     )}

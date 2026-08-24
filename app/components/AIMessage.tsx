@@ -10,7 +10,7 @@ type Props = {
 
 export default function AIMessage({ content }: Props) {
     return (
-        <div className="text-zinc-100 text-[15px] leading-7 space-y-4 font-normal tracking-wide">
+        <div className="text-zinc-100 text-sm leading-7 space-y-4 font-normal tracking-wide">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -172,7 +172,9 @@ function CodeBlock({
         await navigator.clipboard.writeText(children);
 
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        setTimeout(() => {
+            setCopied(false)
+        }, 2000);
     };
 
     // Download code as file
@@ -203,7 +205,7 @@ function CodeBlock({
                     {copied && (
                         <div
                             className="
-                                absolute right-16 -top-2 translate-y-[-100%] flex items-center gap-1 bg-zinc-800 text-emerald-400 border border-emerald-500/30 text-[11px] 
+                                absolute right-16 -top-2 translate-y-[-100%] flex items-center gap-1 bg-zinc-800 text-emerald-400 border border-emerald-500/30 text-xs 
                                 font-sans font-medium px-2 py-0.5 rounded shadow-lg transition-all duration-200
                             "
                         >

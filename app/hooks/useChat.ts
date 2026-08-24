@@ -39,7 +39,7 @@ export function useChat(sdkUrl: string) {
             if (res.ok) {
                 const data = await res.json();
 
-                // Add AI response to UI
+                // Add AI response to the frontend
                 const aiMsg: Message = {
                     id: crypto.randomUUID(),
                     role: "ai",
@@ -47,7 +47,9 @@ export function useChat(sdkUrl: string) {
                 };
                 setMessages((prev) => [...prev, aiMsg]);
             } else {
-                console.error("❌ Failed to generate response");
+                // Read actual error message from the backend
+                const errorData = await res.json().catch(() => null);
+                console.error(errorData?.detail || res.statusText);
             }
         } catch (error) {
             console.error("❌ API Error:", error);

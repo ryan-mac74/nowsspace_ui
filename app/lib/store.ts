@@ -5,11 +5,18 @@ type Listener = (state: AppState) => void;
 export class Store {
     private state: AppState;
     private listeners: Listener[] = [];
-    private followedUserId: string | null = null;
 
     constructor() {
-        this.state = {
-            text: "",
+        this.state = this.getInitialState();
+    }
+
+    private notify() {
+        this.listeners.forEach(fn => fn(this.state));
+    }
+
+    private getInitialState(): AppState {
+        return {
+            controller_id: null,
             users: {},
             messages: [],
             cursors: {},
@@ -20,22 +27,13 @@ export class Store {
         };
     }
 
-    private notify() {
-        this.listeners.forEach(fn => fn(this.state));
+    resetState() {
+        this.state = this.getInitialState();
+        this.notify();
     }
 
     getState(): AppState {
         return this.state;
-    }
-
-    getFollowedUserId(): string | null {
-        return this.followedUserId;
-    }
-
-    setFollowedUserId(id: string | null) {
-        this.followedUserId = id;
-        this.state = { ...this.state };
-        this.notify();
     }
 
     subscribe(fn: Listener) {
@@ -46,9 +44,13 @@ export class Store {
     }
 
     applyPatch(patch: Patch) {
-        // Ensure the patch is valid and has a path before proceeding
-        if (!patch || (typeof patch !== "object") || !("path" in patch) || !patch.path) {
-            return;
+        if (
+            !patch ||
+            (typeof patch !== "object") ||
+            !("path" in patch) ||
+            !patch.path
+        ) {
+            return; // ignore invalid patches with no path
         }
 
         const keys = patch.path.split(".");
@@ -92,22 +94,40 @@ export class Store {
 
         this.state = newState as unknown as AppState;
 
-        // Viewport follow tracking hook logic
-        if (patch.path.startsWith("scrolls.") && this.followedUserId) {
+        // Auto-follow controller's scroll movements
+        if (patch.path.startsWith("scrolls.") && this.state.controller_id && (patch.op === "set")) {
             const pathUserId = keys[1];
-            if ((pathUserId === this.followedUserId) && (patch.op === "set")) {
+
+            if (pathUserId === this.state.controller_id) {
                 const val = patch.value as { x: number; y: number };
+
                 if (val && (typeof val.y === "number")) {
                     window.scrollTo({
-                        left: val.x,
-                        top: val.y,
+                        left: val.x ?? 0,
+                        top: val.y ?? 0,
                         behavior: "smooth"
                     });
                 }
             }
         }
 
-        // Notify state subscribers to trigger a clean React layout re-render pass
+        // Auto-follow controller's page navigation
+        if (patch.path.startsWith("pages.") && this.state.controller_id && (patch.op === "set")) {
+            const pathUserId = keys[1];
+
+            if (pathUserId === this.state.controller_id) {
+                const targetPage = patch.value as string;
+
+                if (
+                    targetPage &&
+                    (typeof window !== "undefined") &&
+                    (window.location.pathname !== targetPage)
+                ) {
+                    window.location.pathname = targetPage;
+                }
+            }
+        }
+
         this.notify();
     }
 }

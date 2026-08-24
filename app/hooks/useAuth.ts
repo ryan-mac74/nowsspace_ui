@@ -12,7 +12,9 @@ import type { UserPublic } from "../types/users";
 const SDK_URL =
   process.env.NEXT_PUBLIC_SDK_URL ||
   "http://localhost:3000/api";
-const TOKEN_KEY = process.env.TOKEN_KEY || "token";
+const TOKEN_KEY =
+  process.env.TOKEN_KEY ||
+  "token";
 
 export default function useAuth() {
   const router = useRouter();
@@ -32,7 +34,7 @@ export default function useAuth() {
       const data = await res.json();
       setUser(data.user ?? null);
     } catch (error: unknown) {
-      console.error("❌ Failed to fetch user:", error);
+      console.error("❌ Failed to fetch current user:", error);
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -48,9 +50,13 @@ export default function useAuth() {
       void fetchMe();
     });
 
-    const handleLogout = () => setUser(null);
     const handleLogin = () => {
       void fetchMe();
+    };
+
+    const handleLogout = () => {
+      clearToken(TOKEN_KEY);
+      setUser(null);
     };
 
     // Sync login/logout across all components using this hook
@@ -66,14 +72,13 @@ export default function useAuth() {
 
   const logout = async (toast: boolean = true) => {
     try {
-      const res = await authFetch(`${SDK_URL}/auth/logout`, {
+      await authFetch(`${SDK_URL}/auth/logout`, {
         method: "POST",
       });
-
-      if (!res.ok) {
-        throw new Error("❌ Failed to log out");
-      }
-
+    } catch (error: unknown) {
+      console.error("❌ Failed to log out:", error);
+      showErrorToast("Something went wrong");
+    } finally {
       clearToken(TOKEN_KEY);
       setUser(null);
 
@@ -86,9 +91,6 @@ export default function useAuth() {
       if (toast) {
         showSuccessToast("You have been logged out");
       }
-    } catch (error: unknown) {
-      console.error("❌ Failed to log out:", error);
-      showErrorToast("Something went wrong");
     }
   };
 
@@ -98,18 +100,14 @@ export default function useAuth() {
     }
 
     try {
-      const res = await authFetch(`${SDK_URL}/auth/delete-all`, {
+      await authFetch(`${SDK_URL}/auth/delete-all`, {
         method: "POST",
       });
-
-      if (!res.ok) {
-        throw new Error("❌ Failed to process all scheduled account deletions");
-      }
-
-      showSuccessToast("All scheduled account deletions have been processed");
     } catch (error: unknown) {
       console.error("❌ Failed to process all scheduled account deletions:", error);
       showErrorToast("Something went wrong");
+    } finally {
+      showSuccessToast("All scheduled account deletions have been processed");
     }
   };
 
@@ -119,14 +117,14 @@ export default function useAuth() {
     }
 
     try {
-      const res = await authFetch(`${SDK_URL}/auth/delete`, {
+      await authFetch(`${SDK_URL}/auth/delete`, {
         method: "POST",
       });
-
-      if (!res.ok) {
-        throw new Error("❌ Failed to schedule account deletion");
-      }
-
+    } catch (error: unknown) {
+      console.error("❌ Failed to schedule account deletion:", error);
+      showErrorToast("Something went wrong");
+    } finally {
+      // Update user local state
       setUser((prev) =>
         prev
           ? {
@@ -141,9 +139,6 @@ export default function useAuth() {
       router.push("/");
 
       showSuccessToast("Your account has been scheduled for deletion");
-    } catch (error: unknown) {
-      console.error("❌ Failed to schedule account deletion:", error);
-      showErrorToast("Something went wrong");
     }
   };
 
@@ -153,14 +148,14 @@ export default function useAuth() {
     }
 
     try {
-      const res = await authFetch(`${SDK_URL}/auth/deactivate`, {
+      await authFetch(`${SDK_URL}/auth/deactivate`, {
         method: "POST",
       });
-
-      if (!res.ok) {
-        throw new Error("❌ Failed to deactivate account");
-      }
-
+    } catch (error: unknown) {
+      console.error("❌ Failed to deactivate account:", error);
+      showErrorToast("Something went wrong");
+    } finally {
+      // Update user local state
       setUser((prev) =>
         prev
           ? {
@@ -174,9 +169,6 @@ export default function useAuth() {
       router.push("/");
 
       showSuccessToast("Your account has been deactivated");
-    } catch (error: unknown) {
-      console.error("❌ Failed to deactivate account:", error);
-      showErrorToast("Something went wrong");
     }
   };
 
@@ -186,14 +178,14 @@ export default function useAuth() {
     }
 
     try {
-      const res = await authFetch(`${SDK_URL}/auth/activate`, {
+      await authFetch(`${SDK_URL}/auth/activate`, {
         method: "POST",
       });
-
-      if (!res.ok) {
-        throw new Error("❌ Failed to reactivate account");
-      }
-
+    } catch (error: unknown) {
+      console.error("❌ Failed to reactivate account:", error);
+      showErrorToast("Something went wrong");
+    } finally {
+      // Update user local state
       setUser((prev) =>
         prev
           ? {
@@ -208,9 +200,6 @@ export default function useAuth() {
       router.push("/");
 
       showSuccessToast("Your account has been reactivated");
-    } catch (error: unknown) {
-      console.error("❌ Failed to reactivate account:", error);
-      showErrorToast("Something went wrong");
     }
   };
 
@@ -229,12 +218,7 @@ export default function useAuth() {
         body: JSON.stringify({ token }),
       });
 
-      if (!res.ok) {
-        throw new Error("❌ Failed to create account");
-      }
-
       const data = await res.json().catch(() => ({}));
-
       if (data.token) {
         // Save newly issued JWT token
         setToken(TOKEN_KEY, data.token);

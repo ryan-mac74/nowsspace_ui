@@ -9,7 +9,6 @@ type Props = {
         x: number;
         y: number;
     }>;
-
 };
 
 export default function CursorLayer({ users, cursors }: Props) {
@@ -40,6 +39,9 @@ export default function CursorLayer({ users, cursors }: Props) {
         <>
             {Object.entries(smooth).map(([userId, cursor]) => {
                 const user = users[userId];
+                if (!user) {
+                    return null;
+                }
 
                 return (
                     <div
@@ -53,7 +55,7 @@ export default function CursorLayer({ users, cursors }: Props) {
                         <svg className="w-5 h-5 drop-shadow" viewBox="0 0 24 24" fill="none">
                             <path
                                 d="M4.5 3V17L9.2 12.3L15 18L18 15L12.3 9.2L17 4.5H4.5Z"
-                                fill={user.color || "#3B82F6"}
+                                fill={user?.color || "#3B82F6"}
                             />
                         </svg>
 
@@ -61,10 +63,10 @@ export default function CursorLayer({ users, cursors }: Props) {
                         <div
                             className="px-2 py-0.5 rounded text-sm text-white ml-3 shadow-md font-medium whitespace-nowrap"
                             style={{
-                                backgroundColor: user.color || "#3B82F6"
+                                backgroundColor: user?.color || "#3B82F6"
                             }}
                         >
-                            @{user.username || `guest.${user.id}`}
+                            @{user?.username || `guest.${user?.id}`}
                         </div>
                     </div>
                 );

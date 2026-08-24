@@ -7,10 +7,7 @@ import { Link2, LogIn, X } from "lucide-react";
 import Button from "../ui/Button";
 import MenuIcon from "../ui/MenuIcon";
 import useAuth from "../../hooks/useAuth";
-
-const SDK_URL =
-  process.env.NEXT_PUBLIC_SDK_URL ||
-  "http://localhost:8080/api";
+import { getAuthUrl } from "../../utils/auth";
 
 type Props = {
   className?: string;
@@ -20,11 +17,11 @@ export default function LoginDialog({ className }: Props) {
   const { isAuthenticated } = useAuth();
 
   const handleGoogleLogin = () => {
-    window.location.href = `${SDK_URL}/auth/google`;
+    window.location.href = getAuthUrl("google");
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = `${SDK_URL}/auth/facebook`;
+    window.location.href = getAuthUrl("facebook");
   };
 
   const actionIcon = isAuthenticated ? Link2 : LogIn;

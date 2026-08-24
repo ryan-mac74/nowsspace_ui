@@ -23,14 +23,14 @@ function OAuthHandlerInner() {
 
     const { showSuccessToast, showErrorToast } = useCustomToast();
     const { oauthConsent } = useAuth();
-    const handled = useRef(false);
+    const lastHandledAuth = useRef<string | null>(null);
 
     useEffect(() => {
-        // Prevent handling multiple times across re-renders
-        if (handled.current || !auth) {
+        // Prevent handling multiple times for the same auth action across re-renders
+        if (!auth || lastHandledAuth.current === auth) {
             return;
         }
-        handled.current = true;
+        lastHandledAuth.current = auth;
 
         // Defer state updates to a microtask frame 
         // so React get mounting done cleanly

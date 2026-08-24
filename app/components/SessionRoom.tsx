@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSocket } from "../hooks/useSocket";
 import { store } from "../lib/store";
 import { UserPublic } from "../types/users";
@@ -15,11 +15,12 @@ import HoverLayer from "../components/layers/HoverLayer";
 type Props = {
     WS_URL: string;
     roomId: string;
+    roomOwnerId: string;
     user: UserPublic;
     onLeave: () => void;
 };
 
-// To generate a selector from an element
+// Generate a selector from an element
 function getElementSelector(el: Element): string {
     if (el.id) {
         return `#${el.id}`;
@@ -35,6 +36,7 @@ function getElementSelector(el: Element): string {
     // but limit depth to avoid overly long selectors
     while (current && (current.nodeType === Node.ELEMENT_NODE) && (path.length < 3)) {
         const selector = current.nodeName.toLowerCase();
+
         if (current.id) {
             path.unshift(`${selector}#${current.id}`);
             break;
@@ -47,9 +49,10 @@ function getElementSelector(el: Element): string {
     return path.join(" > ");
 }
 
-export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
+export default function SessionRoom({
+    WS_URL, roomId, roomOwnerId, user, onLeave
+}: Props) {
     const { state, send } = useSocket(WS_URL, roomId, String(user.id));
-    const [followedUserId, setFollowedUserId] = useState<string | null>(null);
 
     // Keep a stable reference to the "send" function for use in event listeners
     const sendRef = useRef(send);
@@ -57,39 +60,51 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
         sendRef.current = send;
     }, [send]);
 
-    // Track local store changes for following indicators
     useEffect(() => {
-        const checkFollowState = () => setFollowedUserId(store.getFollowedUserId());
-        const unsubscribe = store.subscribe(checkFollowState);
+        const userColor = `#${Math.floor(
+            Math.random() * 16777215
+        ).toString(16).padStart(6, "0")}`;
 
-        return () => unsubscribe();
-    }, []);
+        const uid = String(user.id);
+        const name = user.name || `Guest ${uid}`;
+        const username = user.username || `guest.${uid}`;
 
-    useEffect(() => {
-        const userColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
+        // Add user to the store
+        store.applyPatch({
+            type: "state.patch",
+            op: "set",
+            path: `users.${uid}`,
+            value: {
+                id: uid,
+                name: name,
+                username: username,
+                color: userColor,
+                page: window.location.pathname,
+            }
+        });
 
-        // Add user to presence on mount
+        // Join the room on mount
         sendRef.current({
             id: crypto.randomUUID(),
             type: "presence.join",
             room: roomId,
             payload: {
-                user_id: String(user.id),
-                name: user.name,
-                username: user.username,
+                user_id: uid,
+                name: name,
+                username: username,
                 color: userColor,
                 page: window.location.pathname,
             }
         });
 
         return () => {
-            // Remove user from presence on unmount
+            // Leave the room on unmount
             sendRef.current({
                 id: crypto.randomUUID(),
                 type: "presence.leave",
                 room: roomId,
                 payload: {
-                    user_id: String(user.id),
+                    user_id: uid,
                 }
             });
         };
@@ -133,14 +148,18 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
         let lastSentX = -1, lastSentY = -1;
         let lastHover = "";
 
+        const uid = String(user.id);
+
         const onMouseMove = (e: MouseEvent) => {
             latestX = e.clientX;
             latestY = e.clientY;
 
-            // Track hover state for the element under the cursor
             const target = e.target as Element;
+
+            // Track hover state for the element under the cursor
             if (target && (target.tagName !== "BODY") && (target.tagName !== "HTML")) {
                 const selector = getElementSelector(target);
+
                 if (selector && (selector !== lastHover)) {
                     // Send hover event to the server
                     sendRef.current({
@@ -148,7 +167,7 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
                         type: "element.hover",
                         room: roomId,
                         payload: {
-                            user_id: String(user.id),
+                            user_id: uid,
                             selector,
                         }
                     });
@@ -165,7 +184,7 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
                 type: "click.ping",
                 room: roomId,
                 payload: {
-                    user_id: String(user.id),
+                    user_id: uid,
                     x: e.clientX,
                     y: e.clientY,
                     timestamp: Date.now(),
@@ -180,20 +199,24 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
                 type: "scroll.sync",
                 room: roomId,
                 payload: {
-                    user_id: String(user.id),
+                    user_id: uid,
                     x: window.scrollX,
                     y: window.scrollY,
                 }
             });
         };
 
+        // Add event listeners to handle user actions
         window.addEventListener("mousemove", onMouseMove);
-        window.addEventListener("click", onClick, true); // capture phase to catch clicks before they propagate
+        window.addEventListener("click", onClick, true);
         window.addEventListener("scroll", onScroll);
 
         const cursorInterval = setInterval(() => {
-            if ((latestX === 0 && latestY === 0) || (latestX === lastSentX && latestY === lastSentY)) {
-                return;
+            if (
+                (latestX === 0 && latestY === 0) ||
+                (latestX === lastSentX && latestY === lastSentY)
+            ) {
+                return; // ignore empty cursor moves
             }
 
             lastSentX = latestX;
@@ -205,7 +228,7 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
                 type: "cursor.move",
                 room: roomId,
                 payload: {
-                    user_id: String(user.id),
+                    user_id: uid,
                     x: latestX,
                     y: latestY,
                 }
@@ -223,7 +246,7 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
                     type: "page.change",
                     room: roomId,
                     payload: {
-                        user_id: String(user.id),
+                        user_id: uid,
                         pathname: lastPage,
                     }
                 });
@@ -231,6 +254,7 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
         }, 1000);
 
         return () => {
+            // Remove event listeners on cleanup
             window.removeEventListener("mousemove", onMouseMove);
             window.removeEventListener("click", onClick, true);
             window.removeEventListener("scroll", onScroll);
@@ -240,13 +264,28 @@ export default function SessionRoom({ WS_URL, roomId, user, onLeave }: Props) {
         };
     }, [roomId, user]);
 
+    const handlePassControl = (targetId: string) => {
+        // Send room control event to the server
+        sendRef.current({
+            id: crypto.randomUUID(),
+            type: "room.control",
+            room: roomId,
+            payload: {
+                user_id: String(user.id),
+                target_id: targetId,
+            }
+        });
+    };
+
     return (
         <>
             <PresenceCard
                 roomId={roomId}
+                roomOwnerId={roomOwnerId}
                 users={state.users}
                 localUserId={String(user.id)}
-                followedUserId={followedUserId}
+                controllerId={state.controller_id}
+                onPassControl={handlePassControl}
                 onDisconnect={onLeave}
             />
             <ChatPanel

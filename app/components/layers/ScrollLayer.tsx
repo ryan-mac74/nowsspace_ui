@@ -41,6 +41,9 @@ export default function ScrollLayer({ users, scrolls }: Props) {
         <>
             {Object.entries(indicatorY).map(([userId, yPos]) => {
                 const user = users[userId];
+                if (!user) {
+                    return null;
+                }
 
                 return (
                     <div
@@ -53,7 +56,7 @@ export default function ScrollLayer({ users, scrolls }: Props) {
                         {/* Tiny Arrow Indicator pointing to position */}
                         <div className="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[8px] border-r-blue-500" />
                         <div className="bg-blue-500 text-white font-mono text-xs px-1.5 py-0.5 rounded-l shadow-lg">
-                            @{user.username || `guest.${user.id}`}
+                            @{user?.username || `guest.${user?.id}`}
                         </div>
                     </div>
                 );
