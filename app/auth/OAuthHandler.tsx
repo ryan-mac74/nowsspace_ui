@@ -7,7 +7,7 @@ import useCustomToast from "../hooks/useCustomToast";
 import { setToken } from "../utils/token";
 import useAuth from "../hooks/useAuth";
 
-const TOKEN_KEY = process.env.TOKEN_KEY || "token";
+const TOKEN_KEY = process.env.NEXT_PUBLIC_TOKEN_KEY || "token";
 
 function OAuthHandlerInner() {
     const searchParams = useSearchParams();
