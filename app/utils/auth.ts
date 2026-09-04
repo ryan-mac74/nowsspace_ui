@@ -5,7 +5,7 @@ const SDK_URL =
     "http://localhost:8080/api";
 
 const ENV = process.env.ENV || "development";
-const TOKEN_KEY = process.env.TOKEN_KEY || "token";
+const TOKEN_KEY = process.env.NEXT_PUBLIC_TOKEN_KEY || "token";
 
 export const isProd = ["production", "staging"].includes(ENV);
 export const authMode = isProd ? "cookie" : "bearer";
