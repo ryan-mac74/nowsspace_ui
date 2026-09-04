@@ -1,6 +1,6 @@
 "use client";
 
-import { Room } from "../../types/rooms";
+import type { Room } from "../../types/rooms";
 import Button from "../ui/Button";
 
 type Props = {

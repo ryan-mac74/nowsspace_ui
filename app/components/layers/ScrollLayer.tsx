@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UserPresence, ScrollState } from "../../types/action";
+import type { UserPresence, ScrollState } from "../../types/action";
 
 type Props = {
     users: Record<string, UserPresence>;

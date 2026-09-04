@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useSocket } from "../hooks/useSocket";
 import { store } from "../lib/store";
-import { UserPublic } from "../types/users";
+import type { UserPublic } from "../types/users";
 import PresenceCard from "../components/containers/PresenceCard";
 import ChatPanel from "../components/containers/ChatPanel";
 import CursorLayer from "../components/layers/CursorLayer";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import { AppState, AppEvent, PendingMessage, UserPresence } from "../types/action";
+import type { AppState, AppEvent, PendingMessage, UserPresence } from "../types/action";
 import { store } from "../lib/store";
 
 export function useSocket(WS_URL: string, roomId: string, userId: string) {
