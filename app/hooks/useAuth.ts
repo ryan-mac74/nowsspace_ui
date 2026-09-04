@@ -11,7 +11,7 @@ import type { UserPublic } from "../types/users";
 // to keep the dependencies stable
 const SDK_URL =
   process.env.NEXT_PUBLIC_SDK_URL ||
-  "http://localhost:3000/api";
+  "http://localhost:3030/api";
 const TOKEN_KEY =
   process.env.TOKEN_KEY ||
   "token";
