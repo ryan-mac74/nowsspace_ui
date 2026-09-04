@@ -1,4 +1,4 @@
-import { getToken } from "@/utils/token";
+import { getToken } from "./token";
 
 const SDK_URL =
     process.env.NEXT_PUBLIC_SDK_URL ||

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AppEvent, UserPresence, ChatMessage } from "../../types/action";
+import type { AppEvent, UserPresence, ChatMessage } from "../../types/action";
 import Button from "../ui/Button";
 
 type Props = {

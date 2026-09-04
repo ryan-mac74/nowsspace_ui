@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserPublic } from "../types/users";
-import { Room } from "../types/rooms";
+import type { UserPublic } from "../types/users";
+import type { Room } from "../types/rooms";
 import { authFetch } from "../utils/auth";
 import SessionRoom from "./SessionRoom";
 import PopupMenu from "./containers/PopupMenu";

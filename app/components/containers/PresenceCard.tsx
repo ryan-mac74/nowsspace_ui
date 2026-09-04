@@ -1,7 +1,7 @@
 "use client";
 
 import { Crown, Radio } from "lucide-react";
-import { UserPresence } from "../../types/action";
+import type { UserPresence } from "../../types/action";
 import Button from "../ui/Button";
 
 type Props = {

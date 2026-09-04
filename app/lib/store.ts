@@ -1,4 +1,4 @@
-import { Patch, AppState } from "../types/action";
+import type { Patch, AppState } from "../types/action";
 
 type Listener = (state: AppState) => void;
 
