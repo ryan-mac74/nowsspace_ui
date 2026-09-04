@@ -4,7 +4,7 @@ const SDK_URL =
     process.env.NEXT_PUBLIC_SDK_URL ||
     "http://localhost:8080/api";
 
-const ENV = process.env.ENV || "development";
+const ENV = process.env.NEXT_PUBLIC_ENV || "development";
 const TOKEN_KEY = process.env.NEXT_PUBLIC_TOKEN_KEY || "token";
 
 export const isProd = ["production", "staging"].includes(ENV);
