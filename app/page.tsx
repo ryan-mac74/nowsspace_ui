@@ -4,14 +4,7 @@ import useAuth from "./hooks/useAuth";
 import OAuthHandler from "./auth/OAuthHandler";
 import AppOverlay from "./components/AppOverlay";
 import ChatContainer from "./components/containers/ChatContainer";
-
-const SDK_URL =
-  process.env.NEXT_PUBLIC_SDK_URL ||
-  "http://localhost:8080";
-
-const WS_URL =
-  process.env.NEXT_PUBLIC_WS_URL ||
-  "ws://localhost:8080/ws";
+import { SDK_URL, WS_URL } from "./core/config";
 
 export default function Home() {
   const { user } = useAuth();

@@ -3,18 +3,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { authFetch } from "../utils/auth";
-import { setToken, clearToken } from "../utils/token";
 import useCustomToast from "../hooks/useCustomToast";
 import type { UserPublic } from "../types/users";
-
-// Put static .env variables outside of the hook body (module scope)
-// to keep the dependencies stable
-const SDK_URL =
-  process.env.NEXT_PUBLIC_SDK_URL ||
-  "http://localhost:3030/api";
-const TOKEN_KEY =
-  process.env.TOKEN_KEY ||
-  "token";
+import { SDK_URL } from "../core/config";
 
 export default function useAuth() {
   const router = useRouter();
@@ -55,7 +46,6 @@ export default function useAuth() {
     };
 
     const handleLogout = () => {
-      clearToken(TOKEN_KEY);
       setUser(null);
     };
 
@@ -79,7 +69,6 @@ export default function useAuth() {
       console.error("❌ Failed to log out:", error);
       showErrorToast("Something went wrong");
     } finally {
-      clearToken(TOKEN_KEY);
       setUser(null);
 
       // Notify all instances of this hook to update their state
@@ -210,7 +199,7 @@ export default function useAuth() {
     }
 
     try {
-      const res = await authFetch(`${SDK_URL}/auth/consent`, {
+      await authFetch(`${SDK_URL}/auth/consent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -218,14 +207,8 @@ export default function useAuth() {
         body: JSON.stringify({ token }),
       });
 
-      const data = await res.json().catch(() => ({}));
-      if (data.token) {
-        // Save newly issued JWT token
-        setToken(TOKEN_KEY, data.token);
-
-        // Notify all instances of this hook to update their state
-        window.dispatchEvent(new Event("auth-login"));
-      }
+      // Notify all instances of this hook to update their state
+      window.dispatchEvent(new Event("auth-login"));
 
       // Redirect user to homepage with success message
       router.push("/?auth=signup-success");
