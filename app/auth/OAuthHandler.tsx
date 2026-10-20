@@ -4,18 +4,16 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import ConsentDialog from "../components/dialogs/ConsentDialog";
 import useCustomToast from "../hooks/useCustomToast";
-import { setToken } from "../utils/token";
 import useAuth from "../hooks/useAuth";
-
-const TOKEN_KEY = process.env.NEXT_PUBLIC_TOKEN_KEY || "token";
 
 function OAuthHandlerInner() {
     const searchParams = useSearchParams();
-    const router = useRouter();
-    const pathname = usePathname();
 
     const auth = searchParams.get("auth");
     const token = searchParams.get("token");
+
+    const router = useRouter();
+    const pathname = usePathname();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isConsentOpen, setIsConsentOpen] = useState(false);
@@ -23,6 +21,7 @@ function OAuthHandlerInner() {
 
     const { showSuccessToast, showErrorToast } = useCustomToast();
     const { oauthConsent } = useAuth();
+
     const lastHandledAuth = useRef<string | null>(null);
 
     useEffect(() => {
@@ -42,14 +41,6 @@ function OAuthHandlerInner() {
                     setIsConsentOpen(true);
                 } else {
                     showErrorToast("Invalid/Missing consent token");
-                }
-            } else {
-                if (token) {
-                    // Save session token if available
-                    setToken(TOKEN_KEY, token);
-
-                    // Notify all instances of useAuth hook to update their state
-                    window.dispatchEvent(new Event("auth-login"));
                 }
             }
 

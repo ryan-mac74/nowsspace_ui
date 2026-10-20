@@ -1,9 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const PROJECT_NAME =
-    process.env.NEXT_PUBLIC_PROJECT_NAME ||
-    "NowSSpace";
+import { PROJECT_NAME } from "../../core/config";
 
 export default function Brand() {
     return (

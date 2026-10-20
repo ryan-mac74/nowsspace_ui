@@ -42,7 +42,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                 {messages.length === 0 ? (
                     <div className="h-full min-h-80 flex flex-col items-center justify-center text-white space-y-3">
                         <p className="text-lg font-medium text-zinc-400">
-                            Hello! What do you have in mind?
+                            Hello, what do you have in mind?
                         </p>
                     </div>
                 ) : (
