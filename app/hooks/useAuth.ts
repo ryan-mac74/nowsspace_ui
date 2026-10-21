@@ -192,19 +192,10 @@ export default function useAuth() {
     }
   };
 
-  const oauthConsent = async (token: string | null) => {
-    if (!token) {
-      showErrorToast("Invalid/Missing consent token");
-      return;
-    }
-
+  const oauthConsent = async () => {
     try {
       await authFetch(`${SDK_URL}/auth/consent`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
       });
 
       // Notify all instances of this hook to update their state

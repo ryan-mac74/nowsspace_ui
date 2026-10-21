@@ -8,16 +8,13 @@ import useAuth from "../hooks/useAuth";
 
 function OAuthHandlerInner() {
     const searchParams = useSearchParams();
-
     const auth = searchParams.get("auth");
-    const token = searchParams.get("token");
 
     const router = useRouter();
     const pathname = usePathname();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isConsentOpen, setIsConsentOpen] = useState(false);
-    const [pendingConsentToken, setPendingConsentToken] = useState<string | null>(null);
 
     const { showSuccessToast, showErrorToast } = useCustomToast();
     const { oauthConsent } = useAuth();
@@ -35,13 +32,7 @@ function OAuthHandlerInner() {
         // so React get mounting done cleanly
         queueMicrotask(() => {
             if (auth === "consent") {
-                if (token) {
-                    // Save temporary token in state
-                    setPendingConsentToken(token);
-                    setIsConsentOpen(true);
-                } else {
-                    showErrorToast("Invalid/Missing consent token");
-                }
+                setIsConsentOpen(true);
             }
 
             if (auth === "error") {
@@ -69,19 +60,14 @@ function OAuthHandlerInner() {
             // Clean up URL without reloading the page
             router.replace(pathname);
         });
-    }, [auth, token, pathname, router, showSuccessToast, showErrorToast]);
+    }, [auth, pathname, router, showSuccessToast, showErrorToast]);
 
     const handleOAuthConsent = async () => {
-        if (!pendingConsentToken) {
-            showErrorToast("Missing consent token");
-            return;
-        }
-
         // Set loading state
         setIsLoading(true);
 
         try {
-            await oauthConsent(pendingConsentToken);
+            await oauthConsent();
             setIsConsentOpen(false);
         } catch (error) {
             console.error("❌ Failed to create account:", error);
