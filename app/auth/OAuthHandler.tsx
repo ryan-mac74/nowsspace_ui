@@ -35,26 +35,40 @@ function OAuthHandlerInner() {
                 setIsConsentOpen(true);
             }
 
-            if (auth === "error") {
-                showErrorToast("Authentication failed");
-            }
-            if (auth === "signup-success") {
-                showSuccessToast("Your account has been created");
-            }
-            if (auth === "login-success") {
-                showSuccessToast("You are successfully logged in");
-            }
-            if (auth === "link-success") {
-                showSuccessToast("Your accounts are now linked");
-            }
-            if (auth === "link-error") {
-                showErrorToast("Account already linked to another user");
-            }
-            if (auth === "provider-success") {
-                showSuccessToast("Your account is already linked to this user");
-            }
-            if (auth === "provider-error") {
-                showErrorToast("You can't link accounts from the same provider");
+            switch (auth) {
+                case "login-success":
+                    window.dispatchEvent(new Event("auth-login"));
+                    showSuccessToast("You are successfully logged in");
+                    break;
+
+                case "signup-success":
+                    window.dispatchEvent(new Event("auth-login"));
+                    showSuccessToast("Your account has been created");
+                    break;
+
+                case "link-success":
+                    window.dispatchEvent(new Event("auth-login"));
+                    showSuccessToast("Your accounts are now linked");
+                    break;
+
+                case "link-error":
+                    showErrorToast("Account already linked to another user");
+                    break;
+
+                case "provider-success":
+                    showSuccessToast("Your account is already linked to this user");
+                    break;
+
+                case "provider-error":
+                    showErrorToast("You can't link accounts from the same provider");
+                    break;
+
+                case "error":
+                    showErrorToast("Authentication failed");
+                    break;
+
+                default:
+                    break;
             }
 
             // Clean up URL without reloading the page

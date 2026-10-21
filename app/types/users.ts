@@ -7,8 +7,8 @@ export type UserPublic = {
   avatar?: string;
   address?: string;
   gender?: string;
-  dateOfBirth?: string;
-  deletedAt?: string;
+  date_of_birth?: string;
+  deleted_at?: string;
   is_active: boolean;
   is_verified: boolean;
   is_superuser: boolean;
@@ -20,5 +20,5 @@ export type UserUpdate = {
   avatar?: string;
   address?: string;
   gender?: string;
-  dateOfBirth?: string;
+  date_of_birth?: string;
 };

@@ -138,7 +138,7 @@ export default function AppHeader() {
                                 ) : (
                                     <ActivationDialog
                                         action="activate"
-                                        deletedAt={user?.deletedAt}
+                                        deleted_at={user?.deleted_at}
                                         onConfirm={activateAccount}
                                         className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-green-400 !px-3 !py-2"
                                     />
