@@ -119,7 +119,7 @@ export default function useAuth() {
           ? {
             ...prev,
             is_active: false,
-            deletedAt: new Date().toISOString(),
+            deleted_at: new Date().toISOString(),
           }
           : null
       );
@@ -180,7 +180,7 @@ export default function useAuth() {
           ? {
             ...prev,
             is_active: true,
-            deletedAt: undefined,
+            deleted_at: undefined,
           }
           : null
       );

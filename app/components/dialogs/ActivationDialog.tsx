@@ -9,12 +9,12 @@ import MenuIcon from "../ui/MenuIcon";
 type Props = {
   className?: string;
   action: "activate" | "deactivate" | "delete";
-  deletedAt?: string | Date | null;
+  deleted_at?: string | Date | null;
   onConfirm?: () => Promise<void> | void;
 };
 
 export default function ActivationDialog({
-  className, action, deletedAt, onConfirm
+  className, action, deleted_at, onConfirm
 }: Props) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,12 +38,14 @@ export default function ActivationDialog({
   let description = "";
   let actionButtonClass = "";
 
+  const isPendingDeletion = Boolean(deleted_at);
+
   switch (action) {
     case "activate":
       actionIcon = CheckCircle;
-      actionLabel = deletedAt ? "Cancel Deletion" : "Activate Account";
-      actionTitle = deletedAt ? "Cancel account deletion" : "Reactivate your account";
-      description = deletedAt
+      actionLabel = isPendingDeletion ? "Cancel Deletion" : "Activate Account";
+      actionTitle = isPendingDeletion ? "Cancel account deletion" : "Reactivate your account";
+      description = isPendingDeletion
         ? "Your account is scheduled for permanent deletion. Cancel the process to keep your account"
         : "Your account is currently disabled. Activate it to resume full feature access";
       actionButtonClass = "bg-emerald-600 hover:bg-emerald-500 text-white";
