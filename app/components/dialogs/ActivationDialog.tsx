@@ -86,20 +86,20 @@ export default function ActivationDialog({
         <Dialog.Content
           className="
             fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm
-            bg-zinc-900 border border-zinc-800 text-white rounded-2xl p-6 shadow-2xl flex flex-col gap-4
+            bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white rounded-2xl p-6 shadow-2xl flex flex-col gap-4
           "
         >
           <Dialog.Close asChild>
-            <Button className="absolute left-2 top-2 !p-1 text-zinc-400 hover:text-white bg-transparent">
+            <Button className="absolute left-2 top-2 !p-1 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-transparent">
               <X className="size-5" />
             </Button>
           </Dialog.Close>
 
           <div className="text-center">
-            <Dialog.Title className="text-xl font-bold text-white">
+            <Dialog.Title className="text-xl font-bold text-zinc-900 dark:text-white">
               {actionTitle}
             </Dialog.Title>
-            <Dialog.Description className="text-sm text-zinc-400 mt-2 leading-relaxed">
+            <Dialog.Description className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">
               {description}
             </Dialog.Description>
           </div>
@@ -108,7 +108,7 @@ export default function ActivationDialog({
             <Dialog.Close asChild>
               <Button
                 disabled={loading}
-                className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700/50"
+                className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-300/50 dark:border-zinc-700/50"
               >
                 Cancel
               </Button>

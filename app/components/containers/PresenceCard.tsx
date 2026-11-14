@@ -21,7 +21,7 @@ export default function PresenceCard({
     const isOwner = localUserId === roomOwnerId;
 
     return (
-        <div className="fixed top-4 right-4 z-40 w-80 rounded-xl bg-zinc-900 border border-zinc-800 p-4 text-white shadow-2xl flex flex-col gap-4 pointer-events-auto">
+        <div className="fixed top-4 right-4 z-40 w-80 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 text-zinc-900 dark:text-white shadow-2xl flex flex-col gap-4 pointer-events-auto">
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
@@ -41,7 +41,7 @@ export default function PresenceCard({
                     )}
                 </div>
 
-                <div className="flex flex-col gap-2 max-h-[100px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                <div className="flex flex-col gap-2 max-h-[100px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
                     {Object.values(users).map((user, index) => {
                         const uid = user?.id || String(index);
                         const isController = uid === controllerId;
@@ -51,8 +51,8 @@ export default function PresenceCard({
                             <div
                                 key={uid}
                                 className="
-                                    flex items-center justify-between py-1.5 px-2 rounded-lg bg-zinc-950/40 
-                                    border border-zinc-800/50 transition-colors hover:border-zinc-700/60 shrink-0
+                                    flex items-center justify-between py-1.5 px-2 rounded-lg bg-white/40 dark:bg-zinc-950/40 
+                                    border border-zinc-200/50 dark:border-zinc-800/50 transition-colors hover:border-zinc-300/60 dark:hover:border-zinc-700/60 shrink-0
                                 "
                             >
                                 {/* User Info */}
@@ -85,7 +85,7 @@ export default function PresenceCard({
                                     <div className="flex flex-col min-w-0">
                                         <span
                                             className={`
-                                                text-xs font-medium text-zinc-200 truncate 
+                                                text-xs font-medium text-zinc-800 dark:text-zinc-200 truncate 
                                                 ${isOwner && !isController
                                                     ? "group-hover/user:text-blue-400 transition-colors"
                                                     : ""
@@ -97,7 +97,7 @@ export default function PresenceCard({
 
                                         {/* Controller Badge */}
                                         {isController && (
-                                            <span className="flex items-center gap-1 text-xs text-blue-400 font-medium">
+                                            <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-medium">
                                                 <Radio className="size-2.5 animate-pulse" /> In Control
                                             </span>
                                         )}
@@ -110,7 +110,7 @@ export default function PresenceCard({
                                         {isController ? (
                                             <span
                                                 className="
-                                                    text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/40 
+                                                    text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/40 
                                                     border border-emerald-800/40 px-2 py-1 rounded
                                                 "
                                             >
@@ -120,8 +120,8 @@ export default function PresenceCard({
                                             <Button
                                                 onClick={() => onPassControl(uid)}
                                                 className="
-                                                    text-xs px-2 py-1 bg-zinc-800 hover:bg-blue-600 
-                                                    text-zinc-300 hover:text-white rounded transition
+                                                    text-xs px-2 py-1 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-600 
+                                                    text-zinc-700 dark:text-zinc-300 hover:text-white rounded transition
                                                 "
                                             >
                                                 {isLocalUser ? "Take Control" : "Pass Control"}
@@ -149,15 +149,15 @@ export default function PresenceCard({
             )}
 
             {/* Session Controls */}
-            <div className="border-t border-zinc-800 pt-3 flex flex-col gap-2">
-                <span className="text-xs text-zinc-500 font-mono bg-zinc-950/60 text-center py-1 rounded border border-zinc-800/80">
+            <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 flex flex-col gap-2">
+                <span className="text-xs text-zinc-500 font-mono bg-white/60 dark:bg-zinc-950/60 text-center py-1 rounded border border-zinc-200/80 dark:border-zinc-800/80">
                     ROOM: {roomId}
                 </span>
 
                 <Button
                     onClick={() => navigator.clipboard.writeText(`${window.location.origin}?room=${roomId}`)}
                     className="
-                        w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 
+                        w-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 
                         text-xs font-semibold py-2 rounded-lg transition
                     "
                 >

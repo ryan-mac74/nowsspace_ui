@@ -24,7 +24,7 @@ export default function Brand() {
             <span
                 className="
                     text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r 
-                    from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent
+                    from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-400 bg-clip-text text-transparent
                 "
             >
                 {PROJECT_NAME}

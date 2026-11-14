@@ -7,6 +7,7 @@ import Brand from "./ui/Brand";
 import Avatar from "./ui/Avatar";
 import Button from "./ui/Button";
 import MenuIcon from "./ui/MenuIcon";
+import ThemeToggle from "./ui/ThemeToggle";
 import LoginDialog from "./dialogs/LoginDialog";
 import LogoutDialog from "./dialogs/LogoutDialog";
 import ActivationDialog from "./dialogs/ActivationDialog";
@@ -67,12 +68,14 @@ export default function AppHeader() {
     }, [menuOpen]);
 
     return (
-        <header className="w-full border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
+        <header className="w-full border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
             <Brand />
 
             <div className="flex items-center gap-2">
+                <ThemeToggle />
+
                 {isLoading ? (
-                    <div className="w-10 h-10 rounded-full bg-zinc-800 animate-pulse" />
+                    <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
                 ) : !isAuthenticated ? (
                     <LoginDialog className="!text-white bg-gray-800" />
                 ) : (
@@ -95,70 +98,70 @@ export default function AppHeader() {
                         {menuOpen && (
                             <div
                                 className="
-                                    absolute right-0 mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 
-                                    text-zinc-200 text-sm flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150
+                                    absolute right-0 mt-2 w-64 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 
+                                    text-zinc-800 dark:text-zinc-200 text-sm flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150
                                 "
                             >
-                                <div className="px-3 py-2 border-b border-zinc-800/80 text-sm">
-                                    <p className="font-semibold text-white">
+                                <div className="px-3 py-2 border-b border-zinc-200/80 dark:border-zinc-800/80 text-sm">
+                                    <p className="font-semibold text-zinc-900 dark:text-white">
                                         {user?.name || `Guest ${user?.id}`}
 
-                                        <span className="ml-2 text-zinc-200">
+                                        <span className="ml-2 text-zinc-800 dark:text-zinc-200">
                                             @{user?.username || `guest.${user?.id}`}
                                         </span>
                                     </p>
 
                                     {user?.email && (
-                                        <p className="text-zinc-300 truncate">
+                                        <p className="text-zinc-700 dark:text-zinc-300 truncate">
                                             {user.email}
                                         </p>
                                     )}
 
                                     {user?.is_superuser && (
-                                        <span className="mt-0.5 text-xs inline-flex items-centerfont-bold text-zinc-400">
+                                        <span className="mt-0.5 text-xs inline-flex items-centerfont-bold text-zinc-500 dark:text-zinc-400">
                                             <ShieldCheck className="size-4" /> SuperUser
                                         </span>
                                     )}
                                 </div>
 
-                                <LoginDialog className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-blue-400 !px-3 !py-2" />
+                                <LoginDialog className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-blue-600 dark:!text-blue-400 !px-3 !py-2" />
                                 <LogoutDialog
                                     onLogout={logout}
-                                    className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-purple-400 !px-3 !py-2"
+                                    className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-purple-600 dark:!text-purple-400 !px-3 !py-2"
                                 />
 
-                                <div className="border-t border-zinc-800/80 my-1" />
+                                <div className="border-t border-zinc-200/80 dark:border-zinc-800/80 my-1" />
 
                                 {user?.is_active ? (
                                     <ActivationDialog
                                         action="deactivate"
                                         onConfirm={deactivateAccount}
-                                        className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-yellow-400 !px-3 !py-2"
+                                        className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-yellow-600 dark:!text-yellow-400 !px-3 !py-2"
                                     />
                                 ) : (
                                     <ActivationDialog
                                         action="activate"
                                         deleted_at={user?.deleted_at}
                                         onConfirm={activateAccount}
-                                        className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-green-400 !px-3 !py-2"
+                                        className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-green-600 dark:!text-green-400 !px-3 !py-2"
                                     />
                                 )}
 
                                 <ActivationDialog
                                     action="delete"
                                     onConfirm={deleteAccount}
-                                    className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-rose-400 !px-3 !py-2"
+                                    className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-rose-600 dark:!text-rose-400 !px-3 !py-2"
                                 />
 
                                 {user?.is_superuser && (
                                     <>
-                                        <div className="border-t border-zinc-800/80 my-1" />
+                                        <div className="border-t border-zinc-200/80 dark:border-zinc-800/80 my-1" />
 
                                         <Button
                                             onClick={async () => {
                                                 await deleteAllAccounts();
                                             }}
-                                            className="w-full !justify-start !bg-transparent hover:!bg-zinc-800 !text-rose-800 !px-3 !py-2"
+                                            className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-rose-800 !px-3 !py-2"
                                         >
                                             <MenuIcon Icon={Clock} />
                                             Delete All Accounts
