@@ -1,7 +1,6 @@
 # 🌎 NowSSpace
 
-A real-time synchronization platform providing a way for people to spend time together on the internet (accross any website) relying on specific features behind the scenes.
-
+A real-time Synchronization Platform providing a way for people to spend time together on the internet (accross any website) relying on specific features behind the scenes.
 It's mainly built to connect users in shared virtual rooms with live activity (click, cursor, hover, page, scroll) tracking, with an integrated chat system out of the box.
 
 ## 🛠️ Tech Stack

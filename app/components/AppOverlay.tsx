@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import type { UserPublic } from "../types/users";
 import type { Room } from "../types/rooms";
 import { authFetch } from "../utils/auth";
+import useLanguage from "../hooks/useLanguage";
 import SessionRoom from "./SessionRoom";
 import PopupMenu from "./containers/PopupMenu";
 import LaunchButton from "./ui/LaunchButton";
@@ -19,6 +20,7 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
     const [activeRoom, setActiveRoom] = useState<Room | null>(null);
     const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
     const [isLoadingRooms, setIsLoadingRooms] = useState(false);
+    const { t } = useLanguage();
 
     // Guest User for unauthenticated users
     const [guestUser] = useState<UserPublic>(() => {
@@ -109,7 +111,7 @@ export default function AppOverlay({ SDK_URL, WS_URL, user }: Props) {
     const handleDeleteRoom = async (roomId: string, e: React.MouseEvent) => {
         e.stopPropagation(); // prevent the click from triggering the join button
 
-        if (!window.confirm("Are you sure you want to permanently delete this room?")) {
+        if (!window.confirm(t("rooms.deleteConfirm"))) {
             return;
         }
 

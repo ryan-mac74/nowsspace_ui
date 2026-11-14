@@ -5,6 +5,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { CheckCircle, Trash2, XCircle, X } from "lucide-react";
 import Button from "../ui/Button";
 import MenuIcon from "../ui/MenuIcon";
+import useLanguage from "../../hooks/useLanguage";
 
 type Props = {
   className?: string;
@@ -18,6 +19,7 @@ export default function ActivationDialog({
 }: Props) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { t } = useLanguage();
 
   const handleAction = async () => {
     setLoading(true);
@@ -43,27 +45,27 @@ export default function ActivationDialog({
   switch (action) {
     case "activate":
       actionIcon = CheckCircle;
-      actionLabel = isPendingDeletion ? "Cancel Deletion" : "Activate Account";
-      actionTitle = isPendingDeletion ? "Cancel account deletion" : "Reactivate your account";
+      actionLabel = isPendingDeletion ? t("account.cancelDeletion") : t("account.activate");
+      actionTitle = isPendingDeletion ? t("account.cancelDeletionTitle") : t("account.reactivateTitle");
       description = isPendingDeletion
-        ? "Your account is scheduled for permanent deletion. Cancel the process to keep your account"
-        : "Your account is currently disabled. Activate it to resume full feature access";
+        ? t("account.pendingDeletionDescription")
+        : t("account.disabledDescription");
       actionButtonClass = "bg-emerald-600 hover:bg-emerald-500 text-white";
 
       break;
     case "deactivate":
       actionIcon = XCircle;
-      actionLabel = "Deactivate Account";
-      actionTitle = "Deactivate your account";
-      description = "Your account will temporarily be disabled. Reactivate it at any time for full feature access";
+      actionLabel = t("account.deactivate");
+      actionTitle = t("account.deactivateTitle");
+      description = t("account.deactivateDescription");
       actionButtonClass = "bg-amber-600 hover:bg-amber-500 text-white";
 
       break;
     case "delete":
       actionIcon = Trash2;
-      actionLabel = "Delete Account";
-      actionTitle = "Delete your account";
-      description = "Your account will be permanently queued for deletion. Reactivate it to prevent permanent deletion";
+      actionLabel = t("account.delete");
+      actionTitle = t("account.deleteTitle");
+      description = t("account.deleteDescription");
       actionButtonClass = "bg-rose-600 hover:bg-rose-500 text-white";
 
       break;
@@ -86,20 +88,20 @@ export default function ActivationDialog({
         <Dialog.Content
           className="
             fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm
-            bg-zinc-900 border border-zinc-800 text-white rounded-2xl p-6 shadow-2xl flex flex-col gap-4
+            bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white rounded-2xl p-6 shadow-2xl flex flex-col gap-4
           "
         >
           <Dialog.Close asChild>
-            <Button className="absolute left-2 top-2 !p-1 text-zinc-400 hover:text-white bg-transparent">
+            <Button className="absolute left-2 top-2 !p-1 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-transparent">
               <X className="size-5" />
             </Button>
           </Dialog.Close>
 
           <div className="text-center">
-            <Dialog.Title className="text-xl font-bold text-white">
+            <Dialog.Title className="text-xl font-bold text-zinc-900 dark:text-white">
               {actionTitle}
             </Dialog.Title>
-            <Dialog.Description className="text-sm text-zinc-400 mt-2 leading-relaxed">
+            <Dialog.Description className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">
               {description}
             </Dialog.Description>
           </div>
@@ -108,9 +110,9 @@ export default function ActivationDialog({
             <Dialog.Close asChild>
               <Button
                 disabled={loading}
-                className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700/50"
+                className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-300/50 dark:border-zinc-700/50"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             </Dialog.Close>
             <Button
@@ -118,7 +120,7 @@ export default function ActivationDialog({
               disabled={loading}
               className={actionButtonClass}
             >
-              {loading ? "Processing..." : actionLabel}
+              {loading ? t("account.processing") : actionLabel}
             </Button>
           </div>
         </Dialog.Content>

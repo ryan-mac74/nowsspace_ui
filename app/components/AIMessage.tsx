@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import useLanguage from "../hooks/useLanguage";
 
 type Props = {
     content: string;
@@ -10,23 +11,23 @@ type Props = {
 
 export default function AIMessage({ content }: Props) {
     return (
-        <div className="text-zinc-100 text-sm leading-7 space-y-4 font-normal tracking-wide">
+        <div className="text-zinc-900 dark:text-zinc-100 text-sm leading-7 space-y-4 font-normal tracking-wide">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                     /* Styled Headings */
                     h1: ({ children }) => (
-                        <h1 className="text-2xl font-semibold text-zinc-50 mt-6 mb-3 border-b border-zinc-800 pb-1">
+                        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50 mt-6 mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-1">
                             {children}
                         </h1>
                     ),
                     h2: ({ children }) => (
-                        <h2 className="text-xl font-semibold text-zinc-100 mt-5 mb-2">
+                        <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mt-5 mb-2">
                             {children}
                         </h2>
                     ),
                     h3: ({ children }) => (
-                        <h3 className="text-lg font-medium text-zinc-200 mt-4 mb-2">
+                        <h3 className="text-lg font-medium text-zinc-800 dark:text-zinc-200 mt-4 mb-2">
                             {children}
                         </h3>
                     ),
@@ -40,19 +41,19 @@ export default function AIMessage({ content }: Props) {
 
                     /* Bold Text */
                     strong: ({ children }) => (
-                        <strong className="font-semibold text-zinc-100">
+                        <strong className="font-semibold text-zinc-900 dark:text-zinc-100">
                             {children}
                         </strong>
                     ),
 
                     /* Lists */
                     ul: ({ children }) => (
-                        <ul className="list-disc list-outside pl-6 space-y-1.5 mb-3 text-zinc-200">
+                        <ul className="list-disc list-outside pl-6 space-y-1.5 mb-3 text-zinc-800 dark:text-zinc-200">
                             {children}
                         </ul>
                     ),
                     ol: ({ children }) => (
-                        <ol className="list-decimal list-outside pl-6 space-y-1.5 mb-3 text-zinc-200">
+                        <ol className="list-decimal list-outside pl-6 space-y-1.5 mb-3 text-zinc-800 dark:text-zinc-200">
                             {children}
                         </ol>
                     ),
@@ -68,7 +69,7 @@ export default function AIMessage({ content }: Props) {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors font-medium"
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline underline-offset-2 transition-colors font-medium"
                         >
                             {children}
                         </a>
@@ -76,21 +77,21 @@ export default function AIMessage({ content }: Props) {
 
                     /* Blockquotes */
                     blockquote: ({ children }) => (
-                        <blockquote className="border-l-4 border-blue-500/70 bg-zinc-800/40 pl-4 py-1.5 my-3 rounded-r-md text-zinc-300 italic">
+                        <blockquote className="border-l-4 border-blue-500/70 bg-zinc-100/40 dark:bg-zinc-800/40 pl-4 py-1.5 my-3 rounded-r-md text-zinc-700 dark:text-zinc-300 italic">
                             {children}
                         </blockquote>
                     ),
 
                     /* Tables */
                     table: ({ children }) => (
-                        <div className="overflow-x-auto my-4 border border-zinc-800 rounded-xl">
-                            <table className="min-w-full text-left text-sm divide-y divide-zinc-800">
+                        <div className="overflow-x-auto my-4 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+                            <table className="min-w-full text-left text-sm divide-y divide-zinc-200 dark:divide-zinc-800">
                                 {children}
                             </table>
                         </div>
                     ),
                     thead: ({ children }) => (
-                        <thead className="bg-zinc-800/60 font-semibold text-zinc-200">
+                        <thead className="bg-zinc-100/60 dark:bg-zinc-800/60 font-semibold text-zinc-800 dark:text-zinc-200">
                             {children}
                         </thead>
                     ),
@@ -100,7 +101,7 @@ export default function AIMessage({ content }: Props) {
                         </th>
                     ),
                     td: ({ children }) => (
-                        <td className="px-4 py-3 border-t border-zinc-800/60">
+                        <td className="px-4 py-3 border-t border-zinc-200/60 dark:border-zinc-800/60">
                             {children}
                         </td>
                     ),
@@ -113,7 +114,7 @@ export default function AIMessage({ content }: Props) {
                         if (isInline) {
                             return (
                                 <code
-                                    className="bg-zinc-800 text-pink-300 px-1.5 py-0.5 rounded text-sm font-mono border border-zinc-700/40"
+                                    className="bg-zinc-100 dark:bg-zinc-800 text-pink-600 dark:text-pink-300 px-1.5 py-0.5 rounded text-sm font-mono border border-zinc-300/40 dark:border-zinc-700/40"
                                     {...props}
                                 >
                                     {children}
@@ -166,6 +167,7 @@ function CodeBlock({
     children: string;
 }) {
     const [copied, setCopied] = useState(false);
+    const { t } = useLanguage();
 
     // Copy code to clipboard
     const handleCopy = async () => {
@@ -193,11 +195,11 @@ function CodeBlock({
     };
 
     return (
-        <div className="relative my-4 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 text-zinc-200 font-mono text-sm shadow-md">
+        <div className="relative my-4 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 font-mono text-sm shadow-md">
             {/* Header Bar */}
-            <div className="relative flex items-center justify-between px-4 py-2 bg-zinc-900/90 border-b border-zinc-800/80 text-xs text-zinc-400">
-                <span className="uppercase font-semibold tracking-wider text-zinc-400">
-                    {language || "code"}
+            <div className="relative flex items-center justify-between px-4 py-2 bg-zinc-50/90 dark:bg-zinc-900/90 border-b border-zinc-200/80 dark:border-zinc-800/80 text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="uppercase font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
+                    {language || t("code.defaultLabel")}
                 </span>
 
                 <div className="flex items-center gap-1">
@@ -205,14 +207,14 @@ function CodeBlock({
                     {copied && (
                         <div
                             className="
-                                absolute right-16 -top-2 translate-y-[-100%] flex items-center gap-1 bg-zinc-800 text-emerald-400 border border-emerald-500/30 text-xs 
+                                absolute right-16 -top-2 translate-y-[-100%] flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-xs 
                                 font-sans font-medium px-2 py-0.5 rounded shadow-lg transition-all duration-200
                             "
                         >
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                             </svg>
-                            Copied to clipboard
+                            {t("code.copied")}
                         </div>
                     )}
 
@@ -220,11 +222,11 @@ function CodeBlock({
                     <button
                         type="button"
                         onClick={handleCopy}
-                        aria-label="Copy code"
-                        className="p-1.5 rounded-md hover:bg-zinc-800 hover:text-zinc-100 text-zinc-400 transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-600"
+                        aria-label={t("code.copy")}
+                        className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 text-zinc-500 dark:text-zinc-400 transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-300 dark:focus:ring-zinc-600"
                     >
                         {copied ? (
-                            <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                         ) : (
@@ -240,8 +242,8 @@ function CodeBlock({
                     <button
                         type="button"
                         onClick={handleDownload}
-                        aria-label="Download snippet"
-                        className="p-1.5 rounded-md hover:bg-zinc-800 hover:text-zinc-100 text-zinc-400 transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-600"
+                        aria-label={t("code.download")}
+                        className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 text-zinc-500 dark:text-zinc-400 transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-300 dark:focus:ring-zinc-600"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
@@ -253,7 +255,7 @@ function CodeBlock({
             </div>
 
             {/* Code Content */}
-            <pre className="p-4 overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-800">
+            <pre className="p-4 overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800">
                 <code>
                     {children}
                 </code>

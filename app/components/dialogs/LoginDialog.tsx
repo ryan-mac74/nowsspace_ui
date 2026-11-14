@@ -7,6 +7,7 @@ import { Link2, LogIn, X } from "lucide-react";
 import Button from "../ui/Button";
 import MenuIcon from "../ui/MenuIcon";
 import useAuth from "../../hooks/useAuth";
+import useLanguage from "../../hooks/useLanguage";
 import { getAuthUrl } from "../../utils/auth";
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
 
 export default function LoginDialog({ className }: Props) {
   const { isAuthenticated } = useAuth();
+  const { t } = useLanguage();
 
   const handleGoogleLogin = () => {
     window.location.href = getAuthUrl("google");
@@ -26,14 +28,14 @@ export default function LoginDialog({ className }: Props) {
 
   const actionIcon = isAuthenticated ? Link2 : LogIn;
   const actionLabel = isAuthenticated
-    ? "Link Account"
-    : "Log In";
+    ? t("auth.linkAccount")
+    : t("auth.login");
   const actionTitle = isAuthenticated
-    ? "Link a new account"
-    : "Log in to your account";
+    ? t("auth.linkTitle")
+    : t("auth.loginTitle");
   const description = isAuthenticated
-    ? "Connect another profile from any of the providers below to your account for more login flexibility"
-    : "Choose an account from any of the providers below for starters, then link another profile later";
+    ? t("auth.linkDescription")
+    : t("auth.loginDescription");
 
   return (
     <Dialog.Root>
@@ -51,23 +53,23 @@ export default function LoginDialog({ className }: Props) {
           className="
             fixed z-50 left-1/2 top-1/2 w-[90%] max-w-md
             -translate-x-1/2 -translate-y-1/2
-            bg-zinc-900 border border-zinc-800 text-white
+            bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white
             rounded-2xl p-6 shadow-2xl
             flex flex-col gap-6
           "
         >
           <Dialog.Close asChild>
-            <Button className="absolute left-2 top-2 !p-1 text-zinc-400 hover:text-white bg-transparent">
+            <Button className="absolute left-2 top-2 !p-1 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-transparent">
               <X className="size-5" />
             </Button>
           </Dialog.Close>
 
           <div className="text-center">
-            <Dialog.Title className="text-xl font-bold text-white">
+            <Dialog.Title className="text-xl font-bold text-zinc-900 dark:text-white">
               {actionTitle}
             </Dialog.Title>
 
-            <Dialog.Description className="text-sm text-zinc-400 mt-2 leading-relaxed">
+            <Dialog.Description className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">
               {description}
             </Dialog.Description>
           </div>
@@ -83,7 +85,7 @@ export default function LoginDialog({ className }: Props) {
               "
             >
               <FcGoogle className="size-5" />
-              Continue with Google
+              {t("auth.continueWithGoogle")}
             </button>
 
             {/* Facebook */}
@@ -96,7 +98,7 @@ export default function LoginDialog({ className }: Props) {
               "
             >
               <FaFacebook className="size-5" />
-              Continue with Facebook
+              {t("auth.continueWithFacebook")}
             </button>
           </div>
         </Dialog.Content>

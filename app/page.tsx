@@ -10,7 +10,7 @@ export default function Home() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col relative selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white flex flex-col relative selection:bg-blue-600 selection:text-white">
       <OAuthHandler />
 
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 md:px-8 w-full max-w-7xl mx-auto">
