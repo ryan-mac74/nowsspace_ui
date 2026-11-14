@@ -3,6 +3,7 @@
 import { Crown, Radio } from "lucide-react";
 import type { UserPresence } from "../../types/action";
 import Button from "../ui/Button";
+import useLanguage from "../../hooks/useLanguage";
 
 type Props = {
     roomId: string;
@@ -19,13 +20,14 @@ export default function PresenceCard({
     onPassControl, onDisconnect
 }: Props) {
     const isOwner = localUserId === roomOwnerId;
+    const { t } = useLanguage();
 
     return (
         <div className="fixed top-4 right-4 z-40 w-80 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 text-zinc-900 dark:text-white shadow-2xl flex flex-col gap-4 pointer-events-auto">
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                        Online Participants ({Object.keys(users).length})
+                        {t("presence.participants", { count: Object.keys(users).length })}
                     </h3>
 
                     {/* Host Badge */}
@@ -36,7 +38,7 @@ export default function PresenceCard({
                                 border-amber-800/40 px-1.5 py-0.5 rounded
                             "
                         >
-                            <Crown className="size-3" /> Host
+                            <Crown className="size-3" /> {t("presence.host")}
                         </span>
                     )}
                 </div>
@@ -71,7 +73,7 @@ export default function PresenceCard({
                                     `}
                                     title={
                                         isOwner && !isController
-                                            ? `Click to grant control to @${user?.username || `guest.${user?.id}`}`
+                                            ? t("presence.grantControl", { username: user?.username || `guest.${user?.id}` })
                                             : undefined
                                     }
                                 >
@@ -92,13 +94,13 @@ export default function PresenceCard({
                                                 }
                                             `}
                                         >
-                                            @{user?.username || `guest.${user?.id}`} {isLocalUser && "(You)"}
+                                            @{user?.username || `guest.${user?.id}`} {isLocalUser && t("common.you")}
                                         </span>
 
                                         {/* Controller Badge */}
                                         {isController && (
                                             <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-medium">
-                                                <Radio className="size-2.5 animate-pulse" /> In Control
+                                                <Radio className="size-2.5 animate-pulse" /> {t("presence.inControl")}
                                             </span>
                                         )}
                                     </div>
@@ -114,7 +116,7 @@ export default function PresenceCard({
                                                     border border-emerald-800/40 px-2 py-1 rounded
                                                 "
                                             >
-                                                Active
+                                                {t("presence.active")}
                                             </span>
                                         ) : (
                                             <Button
@@ -124,7 +126,7 @@ export default function PresenceCard({
                                                     text-zinc-700 dark:text-zinc-300 hover:text-white rounded transition
                                                 "
                                             >
-                                                {isLocalUser ? "Take Control" : "Pass Control"}
+                                                {isLocalUser ? t("presence.takeControl") : t("presence.passControl")}
                                             </Button>
                                         )}
                                     </div>
@@ -144,14 +146,14 @@ export default function PresenceCard({
                         border border-amber-500/30 text-xs font-semibold py-2 rounded-lg transition
                     "
                 >
-                    Reclaim Room Control
+                    {t("presence.reclaim")}
                 </Button>
             )}
 
             {/* Session Controls */}
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 flex flex-col gap-2">
                 <span className="text-xs text-zinc-500 font-mono bg-white/60 dark:bg-zinc-950/60 text-center py-1 rounded border border-zinc-200/80 dark:border-zinc-800/80">
-                    ROOM: {roomId}
+                    {t("presence.room", { id: roomId })}
                 </span>
 
                 <Button
@@ -161,7 +163,7 @@ export default function PresenceCard({
                         text-xs font-semibold py-2 rounded-lg transition
                     "
                 >
-                    Copy Room Link
+                    {t("presence.copyLink")}
                 </Button>
 
                 <Button
@@ -171,7 +173,7 @@ export default function PresenceCard({
                         font-semibold py-2 rounded-lg border border-red-900/20 transition
                     "
                 >
-                    Leave Current Session
+                    {t("presence.leave")}
                 </Button>
             </div>
         </div>

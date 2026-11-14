@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import ConsentDialog from "../components/dialogs/ConsentDialog";
 import useCustomToast from "../hooks/useCustomToast";
 import useAuth from "../hooks/useAuth";
+import useLanguage from "../hooks/useLanguage";
 
 function OAuthHandlerInner() {
     const searchParams = useSearchParams();
@@ -18,6 +19,7 @@ function OAuthHandlerInner() {
 
     const { showSuccessToast, showErrorToast } = useCustomToast();
     const { oauthConsent } = useAuth();
+    const { t } = useLanguage();
 
     const lastHandledAuth = useRef<string | null>(null);
 
@@ -38,33 +40,33 @@ function OAuthHandlerInner() {
             switch (auth) {
                 case "login-success":
                     window.dispatchEvent(new Event("auth-login"));
-                    showSuccessToast("You are successfully logged in");
+                    showSuccessToast(t("toast.loginSuccess"));
                     break;
 
                 case "signup-success":
                     window.dispatchEvent(new Event("auth-login"));
-                    showSuccessToast("Your account has been created");
+                    showSuccessToast(t("toast.signupSuccess"));
                     break;
 
                 case "link-success":
                     window.dispatchEvent(new Event("auth-login"));
-                    showSuccessToast("Your accounts are now linked");
+                    showSuccessToast(t("toast.linkSuccess"));
                     break;
 
                 case "link-error":
-                    showErrorToast("Account already linked to another user");
+                    showErrorToast(t("toast.linkError"));
                     break;
 
                 case "provider-success":
-                    showSuccessToast("Your account is already linked to this user");
+                    showSuccessToast(t("toast.providerSuccess"));
                     break;
 
                 case "provider-error":
-                    showErrorToast("You can't link accounts from the same provider");
+                    showErrorToast(t("toast.providerError"));
                     break;
 
                 case "error":
-                    showErrorToast("Authentication failed");
+                    showErrorToast(t("toast.authError"));
                     break;
 
                 default:
@@ -74,7 +76,7 @@ function OAuthHandlerInner() {
             // Clean up URL without reloading the page
             router.replace(pathname);
         });
-    }, [auth, pathname, router, showSuccessToast, showErrorToast]);
+    }, [auth, pathname, router, showSuccessToast, showErrorToast, t]);
 
     const handleOAuthConsent = async () => {
         // Set loading state

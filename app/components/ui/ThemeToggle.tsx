@@ -4,21 +4,26 @@ import { Sun, Moon, Monitor } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme";
 import type { ThemePreference } from "../../context/theme";
 import Button from "./Button";
+import useLanguage from "../../hooks/useLanguage";
+import type { TranslationKey } from "../../i18n/translations";
 
-const OPTIONS: Record<ThemePreference, { Icon: typeof Sun; label: string; next: string }> = {
-    system: { Icon: Monitor, label: "System theme", next: "light" },
-    light: { Icon: Sun, label: "Light theme", next: "dark" },
-    dark: { Icon: Moon, label: "Dark theme", next: "system" },
+const OPTIONS: Record<ThemePreference, { Icon: typeof Sun; label: TranslationKey; next: TranslationKey }> = {
+    system: { Icon: Monitor, label: "theme.system", next: "theme.name.light" },
+    light: { Icon: Sun, label: "theme.light", next: "theme.name.dark" },
+    dark: { Icon: Moon, label: "theme.dark", next: "theme.name.system" },
 };
 
 export default function ThemeToggle() {
     const { preference, toggleTheme } = useTheme();
-    const { Icon, label, next } = OPTIONS[preference];
+    const { t } = useLanguage();
+
+    const { Icon, label: labelKey, next: nextKey } = OPTIONS[preference];
+    const label = t(labelKey);
 
     return (
         <Button
             onClick={toggleTheme}
-            aria-label={`${label} (switch to ${next})`}
+            aria-label={t("theme.switchTo", { label, next: t(nextKey) })}
             title={label}
             className="
                 !p-2 rounded-full text-zinc-500 hover:text-zinc-900

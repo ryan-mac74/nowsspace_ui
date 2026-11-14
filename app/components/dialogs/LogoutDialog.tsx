@@ -5,6 +5,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { LogOut, X } from "lucide-react";
 import Button from "../ui/Button";
 import MenuIcon from "../ui/MenuIcon";
+import useLanguage from "../../hooks/useLanguage";
 
 type Props = {
   className?: string;
@@ -14,6 +15,7 @@ type Props = {
 export default function LogoutDialog({ className, onLogout }: Props) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { t } = useLanguage();
 
   const handleLogout = async () => {
     setLoading(true);
@@ -33,7 +35,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
       <Dialog.Trigger asChild>
         <Button className={className}>
           <MenuIcon Icon={LogOut} />
-          Log Out
+          {t("auth.logout")}
         </Button>
       </Dialog.Trigger>
 
@@ -53,10 +55,10 @@ export default function LogoutDialog({ className, onLogout }: Props) {
 
           <div className="text-center">
             <Dialog.Title className="text-xl font-bold text-zinc-900 dark:text-white">
-              Log out of your account
+              {t("auth.logoutTitle")}
             </Dialog.Title>
             <Dialog.Description className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">
-              Are you sure you want to log out?
+              {t("auth.logoutConfirm")}
             </Dialog.Description>
           </div>
 
@@ -66,7 +68,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
                 disabled={loading}
                 className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-300/50 dark:border-zinc-700/50"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             </Dialog.Close>
             <Button
@@ -74,7 +76,7 @@ export default function LogoutDialog({ className, onLogout }: Props) {
               disabled={loading}
               className="bg-purple-600 hover:bg-purple-500 text-white"
             >
-              {loading ? "Logging out..." : "Log Out"}
+              {loading ? t("auth.loggingOut") : t("auth.logout")}
             </Button>
           </div>
         </Dialog.Content>

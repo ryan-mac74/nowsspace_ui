@@ -4,12 +4,14 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { authFetch } from "../utils/auth";
 import useCustomToast from "../hooks/useCustomToast";
+import useLanguage from "../hooks/useLanguage";
 import type { UserPublic } from "../types/users";
 import { SDK_URL } from "../core/config";
 
 export default function useAuth() {
   const router = useRouter();
   const { showSuccessToast, showErrorToast } = useCustomToast();
+  const { t } = useLanguage();
   const [user, setUser] = useState<UserPublic | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -67,7 +69,7 @@ export default function useAuth() {
       });
     } catch (error: unknown) {
       console.error("❌ Failed to log out:", error);
-      showErrorToast("Something went wrong");
+      showErrorToast(t("toast.genericError"));
     } finally {
       setUser(null);
 
@@ -78,7 +80,7 @@ export default function useAuth() {
       router.push("/");
 
       if (toast) {
-        showSuccessToast("You have been logged out");
+        showSuccessToast(t("toast.loggedOut"));
       }
     }
   };
@@ -94,9 +96,9 @@ export default function useAuth() {
       });
     } catch (error: unknown) {
       console.error("❌ Failed to process all scheduled account deletions:", error);
-      showErrorToast("Something went wrong");
+      showErrorToast(t("toast.genericError"));
     } finally {
-      showSuccessToast("All scheduled account deletions have been processed");
+      showSuccessToast(t("toast.allDeletionsProcessed"));
     }
   };
 
@@ -111,7 +113,7 @@ export default function useAuth() {
       });
     } catch (error: unknown) {
       console.error("❌ Failed to schedule account deletion:", error);
-      showErrorToast("Something went wrong");
+      showErrorToast(t("toast.genericError"));
     } finally {
       // Update user local state
       setUser((prev) =>
@@ -127,7 +129,7 @@ export default function useAuth() {
       // Redirect user to homepage
       router.push("/");
 
-      showSuccessToast("Your account has been scheduled for deletion");
+      showSuccessToast(t("toast.deletionScheduled"));
     }
   };
 
@@ -142,7 +144,7 @@ export default function useAuth() {
       });
     } catch (error: unknown) {
       console.error("❌ Failed to deactivate account:", error);
-      showErrorToast("Something went wrong");
+      showErrorToast(t("toast.genericError"));
     } finally {
       // Update user local state
       setUser((prev) =>
@@ -157,7 +159,7 @@ export default function useAuth() {
       // Redirect user to homepage
       router.push("/");
 
-      showSuccessToast("Your account has been deactivated");
+      showSuccessToast(t("toast.deactivated"));
     }
   };
 
@@ -172,7 +174,7 @@ export default function useAuth() {
       });
     } catch (error: unknown) {
       console.error("❌ Failed to reactivate account:", error);
-      showErrorToast("Something went wrong");
+      showErrorToast(t("toast.genericError"));
     } finally {
       // Update user local state
       setUser((prev) =>
@@ -188,7 +190,7 @@ export default function useAuth() {
       // Redirect user to homepage
       router.push("/");
 
-      showSuccessToast("Your account has been reactivated");
+      showSuccessToast(t("toast.reactivated"));
     }
   };
 
@@ -205,7 +207,7 @@ export default function useAuth() {
       router.push("/?auth=signup-success");
     } catch (error: unknown) {
       console.error("❌ Failed to create account:", error);
-      showErrorToast("Something went wrong");
+      showErrorToast(t("toast.genericError"));
     }
   };
 

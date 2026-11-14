@@ -6,6 +6,7 @@ import AppHeader from "../AppHeader";
 import AIMessage from "../AIMessage";
 import Logo from "../ui/Logo";
 import Button from "../ui/Button";
+import useLanguage from "../../hooks/useLanguage";
 
 type Props = {
     SDK_URL: string;
@@ -15,6 +16,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
     const { messages, isLoading, sendMessage } = useChat(SDK_URL);
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const { t } = useLanguage();
 
     // Auto-scroll to the latest message
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                 {messages.length === 0 ? (
                     <div className="h-full min-h-80 flex flex-col items-center justify-center text-zinc-900 dark:text-white space-y-3">
                         <p className="text-lg font-medium text-zinc-500 dark:text-zinc-400">
-                            Hello, what do you have in mind?
+                            {t("chat.welcome")}
                         </p>
                     </div>
                 ) : (
@@ -114,7 +116,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                         value={input}
                         disabled={isLoading}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="Ask me anything..."
+                        placeholder={t("chat.placeholder")}
                         className="
                             w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-300/80 dark:border-zinc-700/80 rounded-full pl-6 pr-14 py-3.5 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 
                             focus:outline-none focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/80 transition-all text-sm
@@ -124,6 +126,7 @@ export default function ChatContainer({ SDK_URL }: Props) {
                     <Button
                         type="submit"
                         disabled={isLoading || !input.trim()}
+                        aria-label={t("chat.send")}
                         className="
                             absolute right-2 p-2 bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-100 dark:disabled:bg-zinc-800 disabled:text-zinc-400 dark:disabled:text-zinc-600 text-white 
                             rounded-full transition-all flex items-center justify-center

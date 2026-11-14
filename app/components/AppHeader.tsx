@@ -3,11 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { ShieldCheck, Clock } from "lucide-react";
 import useAuth from "../hooks/useAuth";
+import useLanguage from "../hooks/useLanguage";
 import Brand from "./ui/Brand";
 import Avatar from "./ui/Avatar";
 import Button from "./ui/Button";
 import MenuIcon from "./ui/MenuIcon";
 import ThemeToggle from "./ui/ThemeToggle";
+import LanguageToggle from "./ui/LanguageToggle";
 import LoginDialog from "./dialogs/LoginDialog";
 import LogoutDialog from "./dialogs/LogoutDialog";
 import ActivationDialog from "./dialogs/ActivationDialog";
@@ -23,6 +25,7 @@ export default function AppHeader() {
         deleteAccount,
         deleteAllAccounts,
     } = useAuth();
+    const { t } = useLanguage();
 
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -72,6 +75,7 @@ export default function AppHeader() {
             <Brand />
 
             <div className="flex items-center gap-2">
+                <LanguageToggle />
                 <ThemeToggle />
 
                 {isLoading ? (
@@ -104,7 +108,7 @@ export default function AppHeader() {
                             >
                                 <div className="px-3 py-2 border-b border-zinc-200/80 dark:border-zinc-800/80 text-sm">
                                     <p className="font-semibold text-zinc-900 dark:text-white">
-                                        {user?.name || `Guest ${user?.id}`}
+                                        {user?.name || t("header.guest", { id: user?.id ?? "" })}
 
                                         <span className="ml-2 text-zinc-800 dark:text-zinc-200">
                                             @{user?.username || `guest.${user?.id}`}
@@ -119,7 +123,7 @@ export default function AppHeader() {
 
                                     {user?.is_superuser && (
                                         <span className="mt-0.5 text-xs inline-flex items-centerfont-bold text-zinc-500 dark:text-zinc-400">
-                                            <ShieldCheck className="size-4" /> SuperUser
+                                            <ShieldCheck className="size-4" /> {t("header.superuser")}
                                         </span>
                                     )}
                                 </div>
@@ -164,7 +168,7 @@ export default function AppHeader() {
                                             className="w-full !justify-start !bg-transparent hover:!bg-zinc-100 dark:hover:!bg-zinc-800 !text-rose-800 !px-3 !py-2"
                                         >
                                             <MenuIcon Icon={Clock} />
-                                            Delete All Accounts
+                                            {t("account.deleteAll")}
                                         </Button>
                                     </>
                                 )}

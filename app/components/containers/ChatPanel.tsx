@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { AppEvent, UserPresence, ChatMessage } from "../../types/action";
 import Button from "../ui/Button";
+import useLanguage from "../../hooks/useLanguage";
 
 type Props = {
     roomId: string;
@@ -16,6 +17,7 @@ export default function ChatPanel({
     roomId, userId, users, messages, send
 }: Props) {
     const [text, setText] = useState("");
+    const { t } = useLanguage();
 
     function sendMessage() {
         if (!text.trim()) {
@@ -40,7 +42,7 @@ export default function ChatPanel({
     return (
         <div className="fixed bottom-24 right-4 w-80 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 shadow-2xl z-40 text-zinc-900 dark:text-white pointer-events-auto">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2 px-1">
-                Room Chat
+                {t("roomChat.title")}
             </h3>
 
             {/* Messages Log Container */}
@@ -59,7 +61,7 @@ export default function ChatPanel({
                             }
                         >
                             <div className="text-xs text-zinc-500 dark:text-zinc-400 font-mono mb-0.5">
-                                @{user.username || `guest.${m.user_id}`} {m.user_id === userId && "(You)"}
+                                @{user.username || `guest.${m.user_id}`} {m.user_id === userId && t("common.you")}
                             </div>
                             <div className="text-zinc-900 dark:text-zinc-100 break-words text-left">
                                 {m.message}
@@ -78,7 +80,7 @@ export default function ChatPanel({
                     "
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    placeholder="Type message..."
+                    placeholder={t("roomChat.placeholder")}
                     onKeyDown={(e) => (e.key === "Enter") && sendMessage()}
                 />
 
@@ -86,7 +88,7 @@ export default function ChatPanel({
                     onClick={sendMessage}
                     className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 rounded-lg transition"
                 >
-                    Send
+                    {t("roomChat.send")}
                 </Button>
             </div>
         </div>

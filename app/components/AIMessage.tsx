@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import useLanguage from "../hooks/useLanguage";
 
 type Props = {
     content: string;
@@ -166,6 +167,7 @@ function CodeBlock({
     children: string;
 }) {
     const [copied, setCopied] = useState(false);
+    const { t } = useLanguage();
 
     // Copy code to clipboard
     const handleCopy = async () => {
@@ -197,7 +199,7 @@ function CodeBlock({
             {/* Header Bar */}
             <div className="relative flex items-center justify-between px-4 py-2 bg-zinc-50/90 dark:bg-zinc-900/90 border-b border-zinc-200/80 dark:border-zinc-800/80 text-xs text-zinc-500 dark:text-zinc-400">
                 <span className="uppercase font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
-                    {language || "code"}
+                    {language || t("code.defaultLabel")}
                 </span>
 
                 <div className="flex items-center gap-1">
@@ -212,7 +214,7 @@ function CodeBlock({
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                             </svg>
-                            Copied to clipboard
+                            {t("code.copied")}
                         </div>
                     )}
 
@@ -220,7 +222,7 @@ function CodeBlock({
                     <button
                         type="button"
                         onClick={handleCopy}
-                        aria-label="Copy code"
+                        aria-label={t("code.copy")}
                         className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 text-zinc-500 dark:text-zinc-400 transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-300 dark:focus:ring-zinc-600"
                     >
                         {copied ? (
@@ -240,7 +242,7 @@ function CodeBlock({
                     <button
                         type="button"
                         onClick={handleDownload}
-                        aria-label="Download snippet"
+                        aria-label={t("code.download")}
                         className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 text-zinc-500 dark:text-zinc-400 transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-300 dark:focus:ring-zinc-600"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

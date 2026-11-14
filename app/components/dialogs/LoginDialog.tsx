@@ -7,6 +7,7 @@ import { Link2, LogIn, X } from "lucide-react";
 import Button from "../ui/Button";
 import MenuIcon from "../ui/MenuIcon";
 import useAuth from "../../hooks/useAuth";
+import useLanguage from "../../hooks/useLanguage";
 import { getAuthUrl } from "../../utils/auth";
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
 
 export default function LoginDialog({ className }: Props) {
   const { isAuthenticated } = useAuth();
+  const { t } = useLanguage();
 
   const handleGoogleLogin = () => {
     window.location.href = getAuthUrl("google");
@@ -26,14 +28,14 @@ export default function LoginDialog({ className }: Props) {
 
   const actionIcon = isAuthenticated ? Link2 : LogIn;
   const actionLabel = isAuthenticated
-    ? "Link Account"
-    : "Log In";
+    ? t("auth.linkAccount")
+    : t("auth.login");
   const actionTitle = isAuthenticated
-    ? "Link a new account"
-    : "Log in to your account";
+    ? t("auth.linkTitle")
+    : t("auth.loginTitle");
   const description = isAuthenticated
-    ? "Connect another profile from any of the providers below to your account for more login flexibility"
-    : "Choose an account from any of the providers below for starters, then link another profile later";
+    ? t("auth.linkDescription")
+    : t("auth.loginDescription");
 
   return (
     <Dialog.Root>
@@ -83,7 +85,7 @@ export default function LoginDialog({ className }: Props) {
               "
             >
               <FcGoogle className="size-5" />
-              Continue with Google
+              {t("auth.continueWithGoogle")}
             </button>
 
             {/* Facebook */}
@@ -96,7 +98,7 @@ export default function LoginDialog({ className }: Props) {
               "
             >
               <FaFacebook className="size-5" />
-              Continue with Facebook
+              {t("auth.continueWithFacebook")}
             </button>
           </div>
         </Dialog.Content>
